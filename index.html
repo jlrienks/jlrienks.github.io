@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Databricks Data Engineer Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --card: #161a22;
+    --border: #1f2530;
+    --accent: #ff4d1c;
+    --accent2: #ff8c42;
+    --text: #e8ecf4;
+    --muted: #6b7590;
+    --correct: #22c55e;
+    --wrong: #ef4444;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,77,28,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,77,28,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #app { position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,12,16,0.9);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,28,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(255,77,28,0); }
+  }
+
+  .logo-text {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+
+  .logo-text strong {
+    display: block;
+    color: var(--text);
+    font-size: 16px;
+    letter-spacing: 0.02em;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .stat {
+    text-align: right;
+  }
+
+  .stat-val {
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+  }
+
+  /* PROGRESS BAR */
+  .progress-track {
+    height: 3px;
+    background: var(--border);
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  /* CATEGORY PILLS */
+  .categories {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .cat-pill {
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--mono);
+  }
+
+  .cat-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .q-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 10px;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .q-meta {
+    flex: 1;
+  }
+
+  .q-category {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .q-text {
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .q-code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: rgba(255,77,28,0.05);
+    border: 1px solid rgba(255,77,28,0.15);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+    overflow-x: auto;
+    line-height: 1.7;
+    white-space: pre;
+    color: #c9d1d9;
+  }
+
+  /* OPTIONS */
+  .options {
+    padding: 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface);
+  }
+
+  .option:hover:not(.disabled) {
+    border-color: rgba(255,77,28,0.4);
+    background: rgba(255,77,28,0.05);
+  }
+
+  .option.selected { border-color: var(--accent); background: rgba(255,77,28,0.08); }
+  .option.correct { border-color: var(--correct); background: rgba(34,197,94,0.08); }
+  .option.wrong { border-color: var(--wrong); background: rgba(239,68,68,0.08); }
+  .option.disabled { cursor: default; }
+
+  .opt-letter {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .option.selected .opt-letter { background: var(--accent); border-color: var(--accent); color: white; }
+  .option.correct .opt-letter { background: var(--correct); border-color: var(--correct); color: white; }
+  .option.wrong .opt-letter { background: var(--wrong); border-color: var(--wrong); color: white; }
+
+  .opt-text {
+    font-size: 15px;
+    line-height: 1.5;
+    padding-top: 3px;
+  }
+
+  /* EXPLANATION */
+  .explanation {
+    margin: 0 32px 24px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    background: rgba(255,140,66,0.06);
+    border: 1px solid rgba(255,140,66,0.2);
+    font-size: 14px;
+    line-height: 1.7;
+    color: #c9b89a;
+    display: none;
+  }
+
+  .explanation.show { display: block; animation: fadeIn 0.3s ease; }
+  .explanation strong { color: var(--accent2); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ACTIONS */
+  .actions {
+    padding: 20px 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: none;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn-primary:hover { background: #e03d0f; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .result-badge {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    display: none;
+  }
+
+  .result-badge.correct-badge { background: rgba(34,197,94,0.15); color: var(--correct); display: inline-block; }
+  .result-badge.wrong-badge { background: rgba(239,68,68,0.15); color: var(--wrong); display: inline-block; }
+
+  /* SCORE SCREEN */
+  .score-screen {
+    text-align: center;
+    padding: 80px 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: none;
+  }
+
+  .score-screen.show { display: block; animation: slideIn 0.4s ease; }
+
+  .score-ring {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 32px;
+    position: relative;
+  }
+
+  .score-ring svg { transform: rotate(-90deg); }
+
+  .score-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-pct {
+    font-family: var(--mono);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .score-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  .score-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .score-subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 40px;
+  }
+
+  .score-breakdown {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .breakdown-item {
+    text-align: center;
+  }
+
+  .breakdown-val {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .breakdown-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  .correct-val { color: var(--correct); }
+  .wrong-val { color: var(--wrong); }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    header { padding: 16px 20px; }
+    main { padding: 32px 16px; }
+    .question-header { padding: 20px; }
+    .options { padding: 16px 20px; }
+    .actions { padding: 16px 20px; flex-wrap: wrap; }
+    .explanation { margin: 0 20px 20px; }
+    .stats-bar { gap: 16px; }
+    .stat-val { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">DB</div>
+      <div class="logo-text">
+        <strong>Databricks</strong>
+        Data Engineer Exam Prep
+      </div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-val" id="stat-correct">0</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-label">Answered</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-val" id="stat-remaining">—</div>
+        <div class="stat-label">Remaining</div>
+      </div>
+    </div>
+  </header>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <main>
+    <div class="categories" id="categories"></div>
+    <div id="question-card"></div>
+    <div class="score-screen" id="score-screen"></div>
+  </main>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ── DELTA LAKE ──
+  {
+    cat: "Delta Lake",
+    q: "Which Delta Lake command allows you to remove old data files no longer referenced by the current table version?",
+    opts: ["OPTIMIZE", "VACUUM", "ZORDER BY", "PURGE"],
+    ans: 1,
+    exp: "VACUUM removes files no longer referenced by a Delta table and older than the retention threshold (default 7 days). OPTIMIZE compacts small files and can use ZORDER for co-location."
+  },
+  {
+    cat: "Delta Lake",
+    q: "What does the following command do?\n\nDESCRIBE HISTORY my_table LIMIT 5",
+    opts: ["Shows DDL of the last 5 columns", "Returns the 5 most recent transaction log entries", "Deletes the 5 oldest table versions", "Displays 5 sample rows from the table"],
+    ans: 1,
+    exp: "DESCRIBE HISTORY returns audit information from the Delta transaction log including operation, timestamp, and user. LIMIT restricts the number of versions returned."
+  },
+  {
+    cat: "Delta Lake",
+    q: "A data engineer needs to read a Delta table as it existed 3 days ago. Which syntax is correct?",
+    opts: [
+      "SELECT * FROM my_table VERSION AS OF -3",
+      "SELECT * FROM my_table TIMESTAMP AS OF date_sub(current_timestamp(), 3)",
+      "SELECT * FROM my_table AT SNAPSHOT 3",
+      "SELECT * FROM my_table RESTORE TO 3 DAYS"
+    ],
+    ans: 1,
+    exp: "Delta Lake Time Travel supports TIMESTAMP AS OF (using a timestamp expression) or VERSION AS OF (using a version number). date_sub(current_timestamp(), 3) correctly computes the timestamp 3 days ago."
+  },
+  {
+    cat: "Delta Lake",
+    q: "Which statement about Delta Lake ACID transactions is TRUE?",
+    opts: [
+      "Delta Lake only supports Atomicity and Consistency but not Isolation",
+      "Multiple writers can concurrently write to the same table without any coordination",
+      "Delta Lake uses optimistic concurrency control with conflict detection at commit time",
+      "Delta Lake requires an external lock manager like ZooKeeper for ACID guarantees"
+    ],
+    ans: 2,
+    exp: "Delta Lake uses optimistic concurrency control. Writers proceed without locks, and at commit time the transaction log is checked for conflicts. If conflicts exist, one transaction is retried."
+  },
+  {
+    cat: "Delta Lake",
+    q: "What is the primary purpose of the _delta_log directory in a Delta table?",
+    opts: [
+      "Storing raw Parquet data files",
+      "Caching query results for faster reads",
+      "Maintaining the transaction log as JSON and checkpoint files",
+      "Holding schema evolution metadata only"
+    ],
+    ans: 2,
+    exp: "The _delta_log directory contains JSON files for each transaction commit and periodic Parquet checkpoint files that summarize the log up to a given version, enabling efficient state reconstruction."
+  },
+  {
+    cat: "Delta Lake",
+    q: "A team runs OPTIMIZE with ZORDER BY (city, date) on a large Delta table. What is the expected outcome?",
+    opts: [
+      "Rows are sorted globally by city then date across all files",
+      "Small files are compacted and data is co-located by city and date within each file, improving data skipping",
+      "A B-tree index is created on the city and date columns",
+      "Duplicate rows with the same city and date are removed"
+    ],
+    ans: 1,
+    exp: "ZORDER BY performs multi-dimensional clustering within the compacted files, enabling Delta's data skipping feature to skip files where the predicate columns don't match the query filter."
+  },
+  {
+    cat: "Delta Lake",
+    q: "Which command would you use to revert a Delta table to version 10?",
+    opts: [
+      "RESTORE TABLE my_table TO VERSION AS OF 10",
+      "SELECT * FROM my_table VERSION AS OF 10 INTO my_table",
+      "ROLLBACK TABLE my_table VERSION 10",
+      "ALTER TABLE my_table RESTORE 10"
+    ],
+    ans: 0,
+    exp: "RESTORE TABLE ... TO VERSION AS OF is the correct syntax to revert a Delta table to a prior version. It adds a new commit to the transaction log that recreates the prior state."
+  },
+  {
+    cat: "Delta Lake",
+    q: "What happens when you enable Change Data Feed (CDF) on a Delta table?",
+    opts: [
+      "The table is converted to a streaming source automatically",
+      "Delta records row-level changes (insert, update, delete) that can be queried with table_changes()",
+      "All historical versions of rows are deduplicated on read",
+      "Write operations become synchronous and return the changed rows"
+    ],
+    ans: 1,
+    exp: "Change Data Feed captures row-level changes in the _change_data directory. You can query changes using the table_changes() function with a starting version or timestamp, useful for incremental processing."
+  },
+
+  // ── STRUCTURED STREAMING ──
+  {
+    cat: "Structured Streaming",
+    q: "What does the trigger(availableNow=True) option do in a Structured Streaming query?",
+    opts: [
+      "Runs the stream continuously with micro-batches",
+      "Processes all available data and stops, similar to a batch job",
+      "Triggers one micro-batch every second",
+      "Enables exactly-once processing semantics"
+    ],
+    ans: 1,
+    exp: "availableNow=True processes all data available at query start in one or more micro-batches and then stops. It gives batch-like behavior with streaming guarantees like checkpointing."
+  },
+  {
+    cat: "Structured Streaming",
+    q: "Which output mode writes only new rows added to the result table since the last trigger?",
+    opts: ["Complete", "Append", "Update", "Delta"],
+    ans: 1,
+    exp: "Append mode outputs only new rows. Complete mode outputs the entire result table each trigger. Update mode outputs only changed rows. Delta is not a streaming output mode."
+  },
+  {
+    cat: "Structured Streaming",
+    q: "A streaming query fails mid-way. After fixing the issue, the engineer restarts the job. Which mechanism ensures processing continues from where it stopped?",
+    opts: [
+      "Watermarking",
+      "The checkpoint location",
+      "The trigger interval",
+      "The output sink"
+    ],
+    ans: 1,
+    exp: "The checkpoint location stores the streaming query's progress (offsets processed and committed) in durable storage. On restart, the engine reads the checkpoint to resume from the exact position."
+  },
+  {
+    cat: "Structured Streaming",
+    q: "What is the purpose of withWatermark() in Structured Streaming?",
+    opts: [
+      "To define the trigger interval between micro-batches",
+      "To set a threshold for late-arriving data beyond which events are dropped from aggregations",
+      "To specify the output mode of the stream",
+      "To partition the output by event time"
+    ],
+    ans: 1,
+    exp: "withWatermark() specifies the maximum lateness of event data. Events older than (max seen event time - watermark threshold) are dropped, allowing the engine to limit state size and produce results."
+  },
+  {
+    cat: "Structured Streaming",
+    q: "Which source is NOT natively supported by Spark Structured Streaming as a streaming source?",
+    opts: ["Apache Kafka", "Delta Lake", "Auto Loader (cloudFiles)", "PostgreSQL JDBC"],
+    ans: 3,
+    exp: "PostgreSQL via JDBC is a batch source and cannot natively be used as a streaming source in Structured Streaming. Kafka, Delta, and Auto Loader (cloudFiles) are all supported streaming sources."
+  },
+  {
+    cat: "Structured Streaming",
+    q: "A streaming job uses foreachBatch to write to multiple sinks. What is a key advantage of this approach?",
+    opts: [
+      "Automatic schema evolution across sinks",
+      "The micro-batch DataFrame can be reused to write to multiple outputs with arbitrary transformations",
+      "It enables Continuous Processing mode",
+      "foreachBatch removes the need for a checkpoint"
+    ],
+    ans: 1,
+    exp: "foreachBatch provides the micro-batch DataFrame and batch ID, allowing you to apply arbitrary batch operations, write to multiple sinks, and implement idempotency using the batch ID."
+  },
+
+  // ── AUTO LOADER ──
+  {
+    cat: "Auto Loader",
+    q: "What is Auto Loader's primary advantage over a standard spark.read.format('parquet').load() for ingesting cloud storage files?",
+    opts: [
+      "Auto Loader can read from multiple cloud providers simultaneously",
+      "Auto Loader incrementally ingests only new files as they arrive, using file notification or directory listing",
+      "Auto Loader automatically infers and evolves the schema without any configuration",
+      "Auto Loader always uses Continuous Processing mode for lower latency"
+    ],
+    ans: 1,
+    exp: "Auto Loader (cloudFiles) tracks which files have already been ingested using checkpoint metadata and processes only new files incrementally, making it efficient for large-scale cloud storage ingestion."
+  },
+  {
+    cat: "Auto Loader",
+    q: "Which Auto Loader option enables automatic schema inference AND evolution, merging new columns into the target schema?",
+    opts: [
+      "cloudFiles.schemaLocation only",
+      "cloudFiles.inferColumnTypes = true",
+      "cloudFiles.schemaEvolutionMode = 'addNewColumns' with cloudFiles.schemaLocation set",
+      "mergeSchema = true in the writeStream options"
+    ],
+    ans: 2,
+    exp: "Setting cloudFiles.schemaEvolutionMode to 'addNewColumns' with a schemaLocation specified allows Auto Loader to detect new columns in incoming files and merge them into the schema automatically."
+  },
+
+  // ── MEDALLION ARCHITECTURE ──
+  {
+    cat: "Medallion Architecture",
+    q: "In the Medallion (Bronze/Silver/Gold) architecture, what is the primary purpose of the Bronze layer?",
+    opts: [
+      "Storing cleaned, deduplicated, and enriched data ready for analysis",
+      "Landing raw data from source systems with minimal transformations, preserving the original data",
+      "Storing pre-aggregated business metrics for BI tools",
+      "Hosting ML feature tables for model training"
+    ],
+    ans: 1,
+    exp: "Bronze is the raw ingestion layer. It stores data exactly as received from sources (or with minor additions like ingestion timestamps), serving as the single source of truth and audit trail."
+  },
+  {
+    cat: "Medallion Architecture",
+    q: "A data engineer is designing a pipeline from Bronze to Silver. Which transformations are MOST appropriate at the Silver layer?",
+    opts: [
+      "Aggregating daily sales by region and product category",
+      "Storing Kafka messages as raw bytes",
+      "Deduplicating records, casting data types, and applying data quality rules",
+      "Training machine learning models on cleansed data"
+    ],
+    ans: 2,
+    exp: "The Silver layer typically includes cleansing operations: deduplication, type casting, null handling, standardization, and data quality validation — producing a reliable, conformed dataset."
+  },
+  {
+    cat: "Medallion Architecture",
+    q: "Which layer of the Medallion architecture is most appropriate for storing aggregated KPIs used directly by a BI dashboard?",
+    opts: ["Bronze", "Silver", "Gold", "Platinum"],
+    ans: 2,
+    exp: "Gold tables contain business-level aggregations and metrics, optimized for consumption by BI tools, reporting, and business stakeholders. They represent the final, business-ready layer."
+  },
+
+  // ── UNITY CATALOG ──
+  {
+    cat: "Unity Catalog",
+    q: "What is the correct three-level namespace structure in Unity Catalog?",
+    opts: [
+      "workspace.schema.table",
+      "catalog.database.table",
+      "catalog.schema.table",
+      "metastore.catalog.table"
+    ],
+    ans: 2,
+    exp: "Unity Catalog uses a three-level hierarchy: catalog.schema.table (e.g., main.sales.orders). This enables fine-grained governance across multiple workspaces sharing a single metastore."
+  },
+  {
+    cat: "Unity Catalog",
+    q: "Which Unity Catalog privilege allows a user to read data from a table but not create new tables in a schema?",
+    opts: ["USE SCHEMA + CREATE TABLE", "SELECT", "MODIFY", "ALL PRIVILEGES"],
+    ans: 1,
+    exp: "SELECT grants read access to table data. To also query the table, the user also needs USE CATALOG and USE SCHEMA. CREATE TABLE would allow creating new tables, which exceeds read-only access."
+  },
+  {
+    cat: "Unity Catalog",
+    q: "A data engineer wants to enforce row-level security so that sales reps see only their region's data. Which Unity Catalog feature supports this?",
+    opts: ["Column Masks", "Row Filters", "Dynamic Views", "Table Properties"],
+    ans: 1,
+    exp: "Unity Catalog Row Filters allow you to define SQL functions that are automatically applied as predicates when a table is queried, restricting rows based on the querying user's identity or group."
+  },
+  {
+    cat: "Unity Catalog",
+    q: "What is a metastore in Unity Catalog?",
+    opts: [
+      "A database that stores query results",
+      "The top-level container that holds catalogs, schemas, and tables and is typically one per region/cloud account",
+      "A cluster configuration for running SQL queries",
+      "A table format for organizing Delta files"
+    ],
+    ans: 1,
+    exp: "A Unity Catalog metastore is the top-level governance container. It stores metadata, access policies, and audit logs. Best practice is one metastore per cloud region/account, shared across workspaces."
+  },
+
+  // ── SPARK FUNDAMENTALS ──
+  {
+    cat: "Spark Fundamentals",
+    q: "What is the difference between a narrow transformation and a wide transformation in Spark?",
+    opts: [
+      "Narrow transformations involve sorting; wide transformations do not",
+      "Narrow transformations require a shuffle (data movement); wide transformations do not",
+      "Narrow transformations compute on data within a single partition with no shuffle; wide transformations require data shuffling across partitions",
+      "Wide transformations read from multiple DataFrames; narrow transformations read from one"
+    ],
+    ans: 2,
+    exp: "Narrow transformations (map, filter, select) process data within a partition independently. Wide transformations (groupBy, join, sort) require shuffling data across partitions — this is expensive and marks a stage boundary."
+  },
+  {
+    cat: "Spark Fundamentals",
+    q: "A Spark job has a skewed partition where one task takes 10x longer than others. What is the BEST approach to fix this?",
+    opts: [
+      "Increase driver memory",
+      "Use salting or enable Adaptive Query Execution (AQE) with skew join optimization",
+      "Reduce the number of executors",
+      "Use collect() to bring all data to the driver"
+    ],
+    ans: 1,
+    exp: "Skew can be addressed by salting the skewed key or enabling AQE (spark.sql.adaptive.enabled=true), which automatically splits skewed partitions. Collect() is dangerous for large datasets."
+  },
+  {
+    cat: "Spark Fundamentals",
+    q: "What is the effect of calling cache() on a DataFrame in Spark?",
+    opts: [
+      "Immediately computes and stores the DataFrame in memory",
+      "Marks the DataFrame to be stored in memory/disk on its first action, avoiding recomputation",
+      "Writes the DataFrame to DBFS as a Delta table",
+      "Broadcasts the DataFrame to all executor nodes"
+    ],
+    ans: 1,
+    exp: "cache() is lazy — it marks the DataFrame for caching. The data is actually stored on the first action (e.g., count(), show()). Subsequent actions reuse the cached data."
+  },
+  {
+    cat: "Spark Fundamentals",
+    q: "Which join strategy should be used when one DataFrame is small enough to fit in memory and you want to avoid a shuffle?",
+    opts: ["Sort-Merge Join", "Broadcast Hash Join", "Shuffle Hash Join", "Cross Join"],
+    ans: 1,
+    exp: "Broadcast Hash Join broadcasts the smaller DataFrame to all executors, eliminating the shuffle. It's triggered automatically when the smaller side is below spark.sql.autoBroadcastJoinThreshold (default 10MB)."
+  },
+  {
+    cat: "Spark Fundamentals",
+    q: "What does Adaptive Query Execution (AQE) do when spark.sql.adaptive.enabled is true?",
+    opts: [
+      "Pre-compiles all SQL to native code before execution",
+      "Re-optimizes query plans at runtime based on actual statistics from completed stages",
+      "Automatically partitions data based on column cardinality",
+      "Enables vectorized query execution on CPU"
+    ],
+    ans: 1,
+    exp: "AQE collects runtime statistics from completed shuffle stages and uses them to re-optimize subsequent stages, enabling dynamic partition coalescing, skew join handling, and switching join strategies."
+  },
+
+  // ── DATABRICKS WORKFLOWS ──
+  {
+    cat: "Databricks Workflows",
+    q: "A Databricks job task is configured with 'If not succeeded' set to stop the pipeline. What does this mean?",
+    opts: [
+      "If any upstream task fails, downstream tasks are skipped and the job fails",
+      "If the current task hasn't completed within the SLA, the job is stopped",
+      "The task retries indefinitely until it succeeds",
+      "The task runs only on weekends"
+    ],
+    ans: 0,
+    exp: "Task dependencies in Databricks Workflows control execution flow. 'If not succeeded' means downstream tasks only run if the parent completed successfully; otherwise, they are skipped and the job is marked failed."
+  },
+  {
+    cat: "Databricks Workflows",
+    q: "What is a key benefit of using Databricks Asset Bundles (DABs) for deploying workflows?",
+    opts: [
+      "Automatically tunes cluster sizes based on historical job runs",
+      "Enables version-controlled, templated deployment of notebooks, jobs, and pipelines as code",
+      "Provides a graphical drag-and-drop interface for building pipelines",
+      "Automatically migrates Hive metastore tables to Unity Catalog"
+    ],
+    ans: 1,
+    exp: "DABs allow you to define Databricks resources (jobs, DLT pipelines, model serving endpoints) in YAML/JSON configuration files, enabling CI/CD workflows, environment promotion, and version control via Git."
+  },
+  {
+    cat: "Databricks Workflows",
+    q: "Which task type in a Databricks Job is MOST appropriate for running a Delta Live Tables pipeline?",
+    opts: ["Notebook task", "Python script task", "Delta Live Tables pipeline task", "SQL task"],
+    ans: 2,
+    exp: "Databricks Workflows has a native Delta Live Tables task type that triggers a DLT pipeline run with proper dependency tracking, monitoring, and lifecycle management."
+  },
+
+  // ── DELTA LIVE TABLES ──
+  {
+    cat: "Delta Live Tables",
+    q: "What is the difference between a STREAMING TABLE and a MATERIALIZED VIEW in Delta Live Tables?",
+    opts: [
+      "Streaming tables are computed on each pipeline run from scratch; materialized views process only new data",
+      "Streaming tables process only new data incrementally; materialized views are fully recomputed each run",
+      "Both are identical in behavior but streaming tables use Kafka as the source",
+      "Materialized views support APPLY CHANGES; streaming tables do not"
+    ],
+    ans: 1,
+    exp: "STREAMING TABLE processes only new/unprocessed records and is ideal for append-only sources. MATERIALIZED VIEW is fully recomputed each pipeline run, similar to a cached view, and handles non-append sources well."
+  },
+  {
+    cat: "Delta Live Tables",
+    q: "A DLT pipeline uses APPLY CHANGES INTO. What problem does this solve?",
+    opts: [
+      "Compacting small files in the target Delta table",
+      "Processing CDC (Change Data Capture) events to apply inserts, updates, and deletes to a target table",
+      "Automatically broadcasting small lookup tables across the cluster",
+      "Enforcing row-level security on the target table"
+    ],
+    ans: 1,
+    exp: "APPLY CHANGES INTO handles CDC data by interpreting insert/update/delete events from a source and applying them to a target Delta table, maintaining the current state correctly."
+  },
+  {
+    cat: "Delta Live Tables",
+    q: "Which DLT decorator defines data quality constraints and can be configured to warn, drop, or fail on violations?",
+    opts: ["@dlt.table", "@dlt.view", "@dlt.expect / @dlt.expect_or_drop / @dlt.expect_or_fail", "@dlt.constraint"],
+    ans: 2,
+    exp: "DLT expectations use @dlt.expect (warn), @dlt.expect_or_drop (remove violating rows), or @dlt.expect_or_fail (halt the pipeline) to enforce data quality rules declaratively."
+  },
+
+  // ── DATA GOVERNANCE ──
+  {
+    cat: "Data Governance",
+    q: "A data engineer needs to mask the SSN column so non-privileged users see 'XXX-XX-XXXX'. Which Unity Catalog feature is most appropriate?",
+    opts: ["Row Filters", "Column Masks", "Dynamic Views", "Table ACLs"],
+    ans: 1,
+    exp: "Column Masks in Unity Catalog allow you to attach a masking function to a column. When queried, the function is applied automatically based on the user's identity, returning masked values to unauthorized users."
+  },
+  {
+    cat: "Data Governance",
+    q: "What is data lineage in the context of Unity Catalog?",
+    opts: [
+      "The process of archiving old data to cheaper storage",
+      "The ability to track the origin, transformations, and movement of data across tables, notebooks, and workflows",
+      "A compliance framework for GDPR data deletion requests",
+      "The schema history of a Delta table over time"
+    ],
+    ans: 1,
+    exp: "Unity Catalog automatically captures lineage by tracking how data flows between tables, notebooks, jobs, and DLT pipelines. This enables impact analysis, audit, and compliance workflows."
+  },
+
+  // ── PERFORMANCE & OPTIMIZATION ──
+  {
+    cat: "Performance",
+    q: "A Delta table receives thousands of small file writes. After running OPTIMIZE, what is the recommended next step to reclaim storage?",
+    opts: ["ANALYZE TABLE", "VACUUM", "REFRESH TABLE", "DESCRIBE DETAIL"],
+    ans: 1,
+    exp: "OPTIMIZE creates new compacted files but leaves the old small files in place (marked for deletion in the transaction log). VACUUM physically removes files no longer referenced and older than the retention threshold."
+  },
+  {
+    cat: "Performance",
+    q: "Which Spark configuration enables dynamic partition coalescing to reduce shuffle overhead?",
+    opts: [
+      "spark.sql.shuffle.partitions = 200",
+      "spark.sql.adaptive.enabled = true",
+      "spark.default.parallelism = 8",
+      "spark.executor.memory = 8g"
+    ],
+    ans: 1,
+    exp: "Adaptive Query Execution (spark.sql.adaptive.enabled=true) includes dynamic coalescing of shuffle partitions based on actual data sizes, reducing the overhead of too many small partitions."
+  },
+  {
+    cat: "Performance",
+    q: "A query filters heavily on the 'event_date' column. How should you optimize the Delta table to maximize data skipping?",
+    opts: [
+      "Run VACUUM RETAIN 0 HOURS",
+      "Run OPTIMIZE with ZORDER BY (event_date)",
+      "Increase spark.sql.shuffle.partitions",
+      "Convert the table to CSV format"
+    ],
+    ans: 1,
+    exp: "ZORDER BY on event_date clusters data so files contain narrower date ranges. Combined with Delta's min/max statistics per file, this enables data skipping — entire files are skipped when their date range doesn't match the filter."
+  },
+  {
+    cat: "Performance",
+    q: "What is the difference between repartition() and coalesce() in Spark?",
+    opts: [
+      "repartition() only reduces partitions; coalesce() can increase or decrease partitions",
+      "repartition() can increase or decrease partitions and always shuffles data; coalesce() only reduces partitions and avoids a full shuffle",
+      "Both are identical but repartition() uses hash partitioning",
+      "coalesce() triggers an action; repartition() is a lazy transformation"
+    ],
+    ans: 1,
+    exp: "repartition() does a full shuffle and can change partition count in any direction. coalesce() merges partitions without a full shuffle (data moves from fewer executors) and is more efficient when reducing partitions."
+  },
+];
+
+// State
+let state = {
+  questions: [],
+  current: 0,
+  answered: 0,
+  correct: 0,
+  selectedCat: 'All',
+  answered_flags: [],
+  done: false
+};
+
+const categories = ['All', ...new Set(QUESTIONS.map(q => q.cat))];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function initQuestions() {
+  const filtered = state.selectedCat === 'All' ? QUESTIONS : QUESTIONS.filter(q => q.cat === state.selectedCat);
+  state.questions = shuffle(filtered);
+  state.current = 0;
+  state.answered = 0;
+  state.correct = 0;
+  state.answered_flags = state.questions.map(() => null);
+  state.done = false;
+  updateStats();
+  renderCategories();
+  renderQuestion();
+  document.getElementById('score-screen').classList.remove('show');
+  document.getElementById('question-card').style.display = '';
+}
+
+function updateStats() {
+  document.getElementById('stat-correct').textContent = state.correct;
+  document.getElementById('stat-total').textContent = state.answered;
+  const remaining = state.questions.length - state.current;
+  document.getElementById('stat-remaining').textContent = state.done ? '✓' : remaining;
+  const pct = state.questions.length > 0 ? (state.current / state.questions.length) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function renderCategories() {
+  const el = document.getElementById('categories');
+  el.innerHTML = categories.map(c =>
+    `<button class="cat-pill ${c === state.selectedCat ? 'active' : ''}" onclick="selectCat('${c}')">${c}</button>`
+  ).join('');
+}
+
+function selectCat(cat) {
+  state.selectedCat = cat;
+  initQuestions();
+}
+
+function renderQuestion() {
+  const card = document.getElementById('question-card');
+  if (state.current >= state.questions.length) {
+    showScore();
+    return;
+  }
+  const q = state.questions[state.current];
+  const letters = ['A', 'B', 'C', 'D'];
+  const hasCode = q.code;
+
+  card.innerHTML = `
+    <div class="question-card">
+      <div class="question-header">
+        <div class="q-number">Q${state.current + 1}/${state.questions.length}</div>
+        <div class="q-meta">
+          <div class="q-category">${q.cat}</div>
+          <div class="q-text">${q.q}${q.code ? `<div class="q-code">${q.code}</div>` : ''}</div>
+        </div>
+      </div>
+      <div class="options" id="options">
+        ${q.opts.map((opt, i) => `
+          <div class="option" id="opt-${i}" onclick="selectOption(${i})">
+            <div class="opt-letter">${letters[i]}</div>
+            <div class="opt-text">${opt}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="explanation" id="explanation">
+        <strong>Explanation:</strong> ${q.exp}
+      </div>
+      <div class="actions">
+        <div>
+          <span class="result-badge" id="result-badge"></span>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-ghost" onclick="skipQuestion()">Skip</button>
+          <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" disabled>Next →</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function selectOption(idx) {
+  const q = state.questions[state.current];
+  if (state.answered_flags[state.current] !== null) return; // already answered
+
+  state.answered_flags[state.current] = idx;
+  state.answered++;
+  const isCorrect = idx === q.ans;
+  if (isCorrect) state.correct++;
+
+  // Style options
+  const opts = document.querySelectorAll('.option');
+  opts.forEach((el, i) => {
+    el.classList.add('disabled');
+    if (i === q.ans) el.classList.add('correct');
+    else if (i === idx && !isCorrect) el.classList.add('wrong');
+  });
+
+  // Show explanation
+  document.getElementById('explanation').classList.add('show');
+
+  // Result badge
+  const badge = document.getElementById('result-badge');
+  badge.textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+  badge.className = 'result-badge ' + (isCorrect ? 'correct-badge' : 'wrong-badge');
+
+  // Enable next
+  document.getElementById('next-btn').disabled = false;
+  updateStats();
+}
+
+function nextQuestion() {
+  state.current++;
+  updateStats();
+  renderQuestion();
+}
+
+function skipQuestion() {
+  state.answered_flags[state.current] = 'skipped';
+  state.current++;
+  updateStats();
+  renderQuestion();
+}
+
+function showScore() {
+  state.done = true;
+  document.getElementById('question-card').style.display = 'none';
+  const total = state.questions.length;
+  const pct = Math.round((state.correct / total) * 100);
+  const passed = pct >= 70;
+  const circumference = 2 * Math.PI * 60;
+  const dashOffset = circumference * (1 - pct / 100);
+  const color = pct >= 70 ? '#22c55e' : pct >= 50 ? '#ff8c42' : '#ef4444';
+  const title = pct >= 80 ? 'Outstanding!' : pct >= 70 ? 'You Passed!' : pct >= 50 ? 'Keep Studying' : 'Needs Work';
+  const subtitle = pct >= 70 ? 'Great job — you\'re on track for certification.' : 'Review the topics you missed and try again.';
+
+  document.getElementById('score-screen').innerHTML = `
+    <div class="score-ring">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#1f2530" stroke-width="10"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="${color}" stroke-width="10"
+          stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}"
+          stroke-linecap="round" style="transition: stroke-dashoffset 1s ease"/>
+      </svg>
+      <div class="score-center">
+        <div class="score-pct">${pct}%</div>
+        <div class="score-label">Score</div>
+      </div>
+    </div>
+    <div class="score-title" style="color:${color}">${title}</div>
+    <div class="score-subtitle">${subtitle}</div>
+    <div class="score-breakdown">
+      <div class="breakdown-item">
+        <div class="breakdown-val correct-val">${state.correct}</div>
+        <div class="breakdown-label">Correct</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="breakdown-val wrong-val">${total - state.correct}</div>
+        <div class="breakdown-label">Incorrect</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="breakdown-val" style="color:var(--muted)">${total}</div>
+        <div class="breakdown-label">Total</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="initQuestions()" style="font-size:16px;padding:14px 32px;">
+      Try Again ↺
+    </button>
+  `;
+  document.getElementById('score-screen').classList.add('show');
+  document.getElementById('progress-fill').style.width = '100%';
+}
+
+// Boot
+initQuestions();
+</script>
+</body>
+</html>
