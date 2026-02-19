@@ -3,1154 +3,2145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Databricks Data Engineer Exam Prep</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Databricks Certified Data Engineer Associate — Practice Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0c10;
-    --surface: #111318;
-    --card: #161a22;
-    --border: #1f2530;
-    --accent: #ff4d1c;
-    --accent2: #ff8c42;
-    --text: #e8ecf4;
-    --muted: #6b7590;
-    --correct: #22c55e;
-    --wrong: #ef4444;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Syne', sans-serif;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f4f0;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --border: #d8d4cc;
+  --border-dark: #b8b2a8;
+  --accent: #e8401c;
+  --accent-dark: #c23010;
+  --accent-light: #fdf0ec;
+  --text: #1a1816;
+  --text-mid: #4a4540;
+  --text-muted: #8a8278;
+  --correct: #1a7a3c;
+  --correct-bg: #edfaf2;
+  --correct-border: #6fcf97;
+  --wrong: #c0392b;
+  --wrong-bg: #fdf0ee;
+  --wrong-border: #e57373;
+  --warn: #c47d00;
+  --warn-bg: #fffbec;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.12);
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
 
-  /* Grid background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,77,28,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,77,28,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
+/* ─── COVER SCREEN ─── */
+#cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: var(--text);
+  color: #f5f4f0;
+  position: relative;
+  overflow: hidden;
+}
 
-  #app { position: relative; z-index: 1; }
+#cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px
+  ), repeating-linear-gradient(
+    90deg, transparent, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px
+  );
+  pointer-events: none;
+}
 
-  /* HEADER */
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 40px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(10,12,16,0.9);
-    backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+.cover-inner {
+  position: relative;
+  max-width: 680px;
+  width: 100%;
+  text-align: center;
+}
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+.cert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 32px;
+}
 
-  .logo-icon {
-    width: 36px;
-    height: 36px;
-    background: var(--accent);
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    color: white;
-    flex-shrink: 0;
-    animation: pulse 3s ease-in-out infinite;
-  }
+.cert-badge::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: blink 2s ease-in-out infinite;
+}
 
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,28,0.4); }
-    50% { box-shadow: 0 0 0 8px rgba(255,77,28,0); }
-  }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
 
-  .logo-text {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    line-height: 1.3;
-  }
+.cover-title {
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
 
-  .logo-text strong {
-    display: block;
-    color: var(--text);
-    font-size: 16px;
-    letter-spacing: 0.02em;
-  }
+.cover-title span {
+  color: var(--accent);
+}
 
-  .stats-bar {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-  }
+.cover-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 48px;
+  font-weight: 300;
+}
 
-  .stat {
-    text-align: right;
-  }
+.exam-specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
 
-  .stat-val {
-    font-family: var(--mono);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1;
-  }
+.spec-item {
+  background: rgba(255,255,255,0.04);
+  padding: 20px 16px;
+  text-align: center;
+}
 
-  .stat-label {
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 2px;
-  }
+.spec-val {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 6px;
+}
 
-  .stat-divider {
-    width: 1px;
-    height: 32px;
-    background: var(--border);
-  }
+.spec-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
 
-  /* PROGRESS BAR */
-  .progress-track {
-    height: 3px;
-    background: var(--border);
-    position: relative;
-  }
+.domain-list {
+  text-align: left;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 36px;
+}
 
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+.domain-list h3 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 14px;
+  font-family: var(--mono);
+}
 
-  /* MAIN */
-  main {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 48px 24px;
-  }
+.domain-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 13px;
+}
 
-  /* CATEGORY PILLS */
-  .categories {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 32px;
-  }
+.domain-row:last-child { border-bottom: none; }
 
-  .cat-pill {
-    padding: 6px 14px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: var(--mono);
-  }
+.domain-name { color: rgba(255,255,255,0.75); }
 
-  .cat-pill:hover { border-color: var(--accent); color: var(--accent); }
-  .cat-pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+.domain-pct {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
 
-  /* QUESTION CARD */
-  .question-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    animation: slideIn 0.3s ease;
-  }
+.btn-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 40px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+}
 
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+.btn-start:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,64,28,0.4); }
 
-  .question-header {
-    padding: 24px 32px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-  }
+.disclaimer {
+  margin-top: 24px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  line-height: 1.6;
+}
 
-  .q-number {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    padding: 4px 10px;
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
+/* ─── EXAM SCREEN ─── */
+#exam { display: none; }
 
-  .q-meta {
-    flex: 1;
-  }
+.exam-header {
+  background: var(--text);
+  color: white;
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
 
-  .q-category {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
+.exam-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+}
 
-  .q-text {
-    font-size: 17px;
-    line-height: 1.6;
-    font-weight: 600;
-    color: var(--text);
-  }
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
 
-  .q-code {
-    font-family: var(--mono);
-    font-size: 13px;
-    background: rgba(255,77,28,0.05);
-    border: 1px solid rgba(255,77,28,0.15);
-    border-radius: 8px;
-    padding: 16px;
-    margin-top: 12px;
-    overflow-x: auto;
-    line-height: 1.7;
-    white-space: pre;
-    color: #c9d1d9;
-  }
+.exam-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
 
-  /* OPTIONS */
-  .options {
-    padding: 24px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
 
-  .option {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 16px 20px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: var(--surface);
-  }
+.meta-val {
+  color: white;
+  font-weight: 600;
+}
 
-  .option:hover:not(.disabled) {
-    border-color: rgba(255,77,28,0.4);
-    background: rgba(255,77,28,0.05);
-  }
+.timer-val {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--mono);
+  color: #fff;
+  transition: color 0.3s;
+  min-width: 60px;
+  text-align: right;
+}
 
-  .option.selected { border-color: var(--accent); background: rgba(255,77,28,0.08); }
-  .option.correct { border-color: var(--correct); background: rgba(34,197,94,0.08); }
-  .option.wrong { border-color: var(--wrong); background: rgba(239,68,68,0.08); }
-  .option.disabled { cursor: default; }
+.timer-val.warn { color: var(--warn); }
+.timer-val.danger { color: var(--wrong); animation: timerFlash 1s ease-in-out infinite; }
 
-  .opt-letter {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 700;
-    flex-shrink: 0;
-    transition: all 0.2s;
-  }
+@keyframes timerFlash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 
-  .option.selected .opt-letter { background: var(--accent); border-color: var(--accent); color: white; }
-  .option.correct .opt-letter { background: var(--correct); border-color: var(--correct); color: white; }
-  .option.wrong .opt-letter { background: var(--wrong); border-color: var(--wrong); color: white; }
+.progress-bar-wrap {
+  background: rgba(255,255,255,0.1);
+  height: 3px;
+  position: relative;
+}
 
-  .opt-text {
-    font-size: 15px;
-    line-height: 1.5;
-    padding-top: 3px;
-  }
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
 
-  /* EXPLANATION */
-  .explanation {
-    margin: 0 32px 24px;
-    padding: 16px 20px;
-    border-radius: 10px;
-    background: rgba(255,140,66,0.06);
-    border: 1px solid rgba(255,140,66,0.2);
-    font-size: 14px;
-    line-height: 1.7;
-    color: #c9b89a;
-    display: none;
-  }
+.exam-body {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 59px);
+  gap: 0;
+}
 
-  .explanation.show { display: block; animation: fadeIn 0.3s ease; }
-  .explanation strong { color: var(--accent2); }
+/* ─── QUESTION NAV SIDEBAR ─── */
+.q-nav {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 24px 16px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 59px;
+  height: calc(100vh - 59px);
+  overflow-y: auto;
+}
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+.q-nav h4 {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  font-family: var(--mono);
+  padding: 0 4px;
+}
 
-  /* ACTIONS */
-  .actions {
-    padding: 20px 32px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: space-between;
-  }
+.q-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin-bottom: 24px;
+}
 
-  .btn {
-    padding: 10px 24px;
-    border-radius: 8px;
-    border: none;
-    font-family: var(--sans);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.02em;
-  }
+.q-nav-btn {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .btn-primary {
-    background: var(--accent);
-    color: white;
-  }
+.q-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.q-nav-btn.current { background: var(--text); color: white; border-color: var(--text); }
+.q-nav-btn.answered { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+.q-nav-btn.flagged { background: var(--warn-bg); border-color: var(--warn); color: var(--warn); }
 
-  .btn-primary:hover { background: #e03d0f; transform: translateY(-1px); }
-  .btn-primary:disabled { opacity: 0.4; cursor: default; transform: none; }
+.nav-legend {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  .btn-ghost {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-  }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
 
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
 
-  .result-badge {
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 14px;
-    border-radius: 6px;
-    display: none;
-  }
+.legend-dot.l-current { background: var(--text); border-color: var(--text); }
+.legend-dot.l-answered { background: var(--accent-light); border-color: var(--accent); }
+.legend-dot.l-flagged { background: var(--warn-bg); border-color: var(--warn); }
+.legend-dot.l-unanswered { background: transparent; }
 
-  .result-badge.correct-badge { background: rgba(34,197,94,0.15); color: var(--correct); display: inline-block; }
-  .result-badge.wrong-badge { background: rgba(239,68,68,0.15); color: var(--wrong); display: inline-block; }
+/* ─── QUESTION CONTENT ─── */
+.q-content {
+  flex: 1;
+  padding: 32px 40px;
+  max-width: 800px;
+}
 
-  /* SCORE SCREEN */
-  .score-screen {
-    text-align: center;
-    padding: 80px 40px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    display: none;
-  }
+.q-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
 
-  .score-screen.show { display: block; animation: slideIn 0.4s ease; }
+.q-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
 
-  .score-ring {
-    width: 160px;
-    height: 160px;
-    margin: 0 auto 32px;
-    position: relative;
-  }
+.q-tag::before {
+  content: '';
+  width: 3px;
+  height: 14px;
+  background: var(--accent);
+  border-radius: 2px;
+}
 
-  .score-ring svg { transform: rotate(-90deg); }
+.flag-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
 
-  .score-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+.flag-btn:hover { border-color: var(--warn); color: var(--warn); }
+.flag-btn.flagged { background: var(--warn-bg); border-color: var(--warn); color: var(--warn); }
 
-  .score-pct {
-    font-family: var(--mono);
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1;
-  }
+.question-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
 
-  .score-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 4px;
-  }
+.question-text {
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 20px;
+}
 
-  .score-title {
-    font-size: 32px;
-    font-weight: 800;
-    margin-bottom: 12px;
-  }
+.code-block {
+  background: #1a1816;
+  color: #c9d1d9;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.75;
+  padding: 20px 24px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+  white-space: pre;
+  border-left: 3px solid var(--accent);
+}
 
-  .score-subtitle {
-    color: var(--muted);
-    font-size: 15px;
-    margin-bottom: 40px;
-  }
+.kw { color: #ff7b72; }
+.fn { color: #d2a8ff; }
+.str { color: #a5d6ff; }
+.cm { color: #8b949e; }
+.num { color: #79c0ff; }
 
-  .score-breakdown {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    margin-bottom: 40px;
-  }
+/* ─── OPTIONS ─── */
+.options-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
 
-  .breakdown-item {
-    text-align: center;
-  }
+.option-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: var(--surface);
+  user-select: none;
+}
 
-  .breakdown-val {
-    font-family: var(--mono);
-    font-size: 28px;
-    font-weight: 700;
-  }
+.option-row:hover:not(.locked) {
+  border-color: #b0a090;
+  background: #faf9f7;
+}
 
-  .breakdown-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 4px;
-  }
+.option-row.selected {
+  border-color: var(--text);
+  background: #f0ede8;
+}
 
-  .correct-val { color: var(--correct); }
-  .wrong-val { color: var(--wrong); }
+.option-row.correct {
+  border-color: var(--correct-border);
+  background: var(--correct-bg);
+}
 
-  /* RESPONSIVE */
-  @media (max-width: 640px) {
-    header { padding: 16px 20px; }
-    main { padding: 32px 16px; }
-    .question-header { padding: 20px; }
-    .options { padding: 16px 20px; }
-    .actions { padding: 16px 20px; flex-wrap: wrap; }
-    .explanation { margin: 0 20px 20px; }
-    .stats-bar { gap: 16px; }
-    .stat-val { font-size: 16px; }
-  }
+.option-row.incorrect {
+  border-color: var(--wrong-border);
+  background: var(--wrong-bg);
+}
+
+.option-row.reveal-correct {
+  border-color: var(--correct-border);
+  background: var(--correct-bg);
+}
+
+.option-row.locked { cursor: default; }
+
+.opt-key {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  border: 1.5px solid var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+  background: white;
+  transition: all 0.18s;
+}
+
+.option-row.selected .opt-key {
+  background: var(--text);
+  border-color: var(--text);
+  color: white;
+}
+
+.option-row.correct .opt-key {
+  background: var(--correct);
+  border-color: var(--correct);
+  color: white;
+}
+
+.option-row.incorrect .opt-key {
+  background: var(--wrong);
+  border-color: var(--wrong);
+  color: white;
+}
+
+.option-row.reveal-correct .opt-key {
+  background: var(--correct);
+  border-color: var(--correct);
+  color: white;
+}
+
+.opt-body {
+  flex: 1;
+  font-size: 14.5px;
+  line-height: 1.55;
+  padding-top: 2px;
+}
+
+.opt-indicator {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ─── EXPLANATION BOX ─── */
+.explanation-box {
+  display: none;
+  padding: 16px 20px;
+  border-radius: 6px;
+  border-left: 3px solid var(--correct-border);
+  background: var(--correct-bg);
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #2d5a3d;
+  margin-bottom: 24px;
+  animation: fadeSlide 0.3s ease;
+}
+
+.explanation-box.show-wrong {
+  border-left-color: #e57373;
+  background: var(--wrong-bg);
+  color: #7a1a1a;
+}
+
+.explanation-box.show, .explanation-box.show-wrong { display: block; }
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.exp-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: 0.7;
+}
+
+/* ─── BOTTOM NAV ─── */
+.q-bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 5px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: 1.5px solid transparent;
+  letter-spacing: 0.01em;
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--border-dark);
+  color: var(--text-mid);
+}
+
+.btn-outline:hover { border-color: var(--text); color: var(--text); }
+
+.btn-primary {
+  background: var(--text);
+  color: white;
+  border-color: var(--text);
+}
+
+.btn-primary:hover { background: #333; }
+.btn-primary:disabled { opacity: 0.35; cursor: default; }
+
+.btn-danger {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.btn-danger:hover { background: var(--accent-dark); }
+
+.answered-status {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.answered-status strong {
+  color: var(--text);
+}
+
+/* ─── RESULTS SCREEN ─── */
+#results { display: none; }
+
+.results-header {
+  background: var(--text);
+  color: white;
+  padding: 48px 40px;
+  text-align: center;
+}
+
+.result-status-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.badge-pass { background: rgba(34, 197, 94, 0.15); color: #6fcf97; border: 1px solid #6fcf97; }
+.badge-fail { background: rgba(239, 68, 68, 0.1); color: #e57373; border: 1px solid #e57373; }
+
+.result-score-big {
+  font-family: var(--mono);
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.result-score-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 32px;
+}
+
+.result-score-sub strong {
+  color: rgba(255,255,255,0.8);
+}
+
+.score-cards {
+  display: flex;
+  gap: 1px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.score-card {
+  flex: 1;
+  padding: 20px 16px;
+  background: rgba(255,255,255,0.04);
+  text-align: center;
+}
+
+.sc-val {
+  font-family: var(--mono);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.sc-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.results-body {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Domain analysis */
+.domain-analysis {
+  margin-bottom: 40px;
+}
+
+.domain-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 10px;
+  transition: box-shadow 0.2s;
+}
+
+.domain-card:hover { box-shadow: var(--shadow); }
+
+.domain-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.domain-card-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.domain-card-score {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.domain-bar-track {
+  height: 6px;
+  background: var(--bg);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.domain-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.domain-bar-fill.strong { background: var(--correct); }
+.domain-bar-fill.medium { background: var(--warn); }
+.domain-bar-fill.weak { background: var(--wrong); }
+
+.domain-recommendation {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.domain-recommendation.needs-work {
+  color: var(--wrong);
+  font-weight: 500;
+}
+
+/* Weak areas panel */
+.weak-panel {
+  background: #fff8f6;
+  border: 1px solid #f5c4bc;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.weak-panel h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weak-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f5c4bc;
+  font-size: 13px;
+}
+
+.weak-item:last-child { border-bottom: none; }
+
+.weak-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.weak-text { line-height: 1.5; color: var(--text-mid); }
+.weak-text strong { color: var(--text); display: block; font-size: 13px; }
+
+/* Review section */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.review-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.review-item-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.review-item-header:hover { background: var(--bg); }
+
+.review-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ri-correct { background: var(--correct-bg); color: var(--correct); border: 1px solid var(--correct-border); }
+.ri-wrong { background: var(--wrong-bg); color: var(--wrong); border: 1px solid var(--wrong-border); }
+.ri-skip { background: var(--warn-bg); color: var(--warn); border: 1px solid #f0c060; }
+
+.review-q-text {
+  flex: 1;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text-mid);
+}
+
+.review-cat {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.review-item-body {
+  display: none;
+  padding: 0 20px 16px;
+  border-top: 1px solid var(--border);
+  background: #faf9f7;
+}
+
+.review-item-body.open { display: block; }
+
+.review-answers {
+  padding: 14px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.review-ans-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.review-ans-row.r-correct { background: var(--correct-bg); color: var(--correct); }
+.review-ans-row.r-wrong { background: var(--wrong-bg); color: var(--wrong); }
+
+.review-exp {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: white;
+  border-radius: 4px;
+  border-left: 3px solid var(--border-dark);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-mid);
+}
+
+.results-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* MODALS */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: white;
+  border-radius: 10px;
+  padding: 32px;
+  max-width: 440px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal h2 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.modal p { font-size: 14px; color: var(--text-mid); line-height: 1.6; margin-bottom: 24px; }
+
+.modal-actions { display: flex; gap: 10px; justify-content: center; }
+
+@media (max-width: 768px) {
+  .q-nav { display: none; }
+  .q-content { padding: 20px; }
+  .exam-meta { gap: 12px; }
+  .results-body { padding: 24px 16px; }
+  .results-header { padding: 32px 20px; }
+  .result-score-big { font-size: 56px; }
+  .score-cards { flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <div class="logo">
-      <div class="logo-icon">DB</div>
-      <div class="logo-text">
-        <strong>Databricks</strong>
-        Data Engineer Exam Prep
+
+<!-- ═══════════════════ COVER ═══════════════════ -->
+<div id="cover">
+  <div class="cover-inner">
+    <div class="cert-badge">Databricks Certification Practice</div>
+    <h1 class="cover-title">Certified Data Engineer<br><span>Associate</span></h1>
+    <p class="cover-subtitle">Practice Examination · Version 2024.3</p>
+
+    <div class="exam-specs">
+      <div class="spec-item">
+        <div class="spec-val">90</div>
+        <div class="spec-label">Questions</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-val">120</div>
+        <div class="spec-label">Minutes</div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-val">70%</div>
+        <div class="spec-label">Pass Score</div>
       </div>
     </div>
-    <div class="stats-bar">
-      <div class="stat">
-        <div class="stat-val" id="stat-correct">0</div>
-        <div class="stat-label">Correct</div>
+
+    <div class="domain-list">
+      <h3>Exam Domains &amp; Weightings</h3>
+      <div class="domain-row"><span class="domain-name">Databricks Lakehouse Platform</span><span class="domain-pct">24%</span></div>
+      <div class="domain-row"><span class="domain-name">ELT with Apache Spark &amp; Python</span><span class="domain-pct">29%</span></div>
+      <div class="domain-row"><span class="domain-name">Incremental Data Processing</span><span class="domain-pct">22%</span></div>
+      <div class="domain-row"><span class="domain-name">Production Pipelines</span><span class="domain-pct">16%</span></div>
+      <div class="domain-row"><span class="domain-name">Data Governance</span><span class="domain-pct">9%</span></div>
+    </div>
+
+    <button class="btn-start" onclick="startExam()">Begin Exam →</button>
+    <p class="disclaimer">These are practice questions designed to resemble the real exam. They are not official Databricks exam questions. The real exam is administered via PSI.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════ EXAM ═══════════════════ -->
+<div id="exam">
+  <header class="exam-header">
+    <div class="exam-brand">
+      <div class="brand-dot"></div>
+      Databricks · Data Engineer Associate
+    </div>
+    <div class="exam-meta">
+      <div class="meta-item">
+        <span>Q</span><span class="meta-val" id="hdr-qnum">1/90</span>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <div class="stat-val" id="stat-total">0</div>
-        <div class="stat-label">Answered</div>
+      <div class="meta-item">
+        <span>Answered:</span><span class="meta-val" id="hdr-answered">0</span>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <div class="stat-val" id="stat-remaining">—</div>
-        <div class="stat-label">Remaining</div>
+      <div class="meta-item">
+        ⏱ <span class="timer-val" id="timer">120:00</span>
       </div>
+      <button class="btn btn-danger" onclick="openSubmitModal()" style="padding:6px 16px;font-size:13px">Submit Exam</button>
     </div>
   </header>
-  <div class="progress-track">
-    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
   </div>
 
-  <main>
-    <div class="categories" id="categories"></div>
-    <div id="question-card"></div>
-    <div class="score-screen" id="score-screen"></div>
-  </main>
+  <div class="exam-body">
+    <!-- Sidebar -->
+    <nav class="q-nav">
+      <h4>Questions</h4>
+      <div class="q-nav-grid" id="q-nav-grid"></div>
+      <div class="nav-legend">
+        <div class="legend-item"><div class="legend-dot l-current"></div>Current</div>
+        <div class="legend-item"><div class="legend-dot l-answered"></div>Answered</div>
+        <div class="legend-item"><div class="legend-dot l-flagged"></div>Flagged</div>
+        <div class="legend-item"><div class="legend-dot l-unanswered"></div>Unanswered</div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="q-content">
+      <div class="q-top-bar">
+        <div class="q-tag" id="q-domain-tag">Domain</div>
+        <button class="flag-btn" id="flag-btn" onclick="toggleFlag()">⚑ Flag for review</button>
+      </div>
+      <div class="question-num" id="q-num-label">Question 1 of 90</div>
+      <div class="question-text" id="q-text"></div>
+      <div class="code-block" id="q-code" style="display:none"></div>
+      <div class="options-wrap" id="q-options"></div>
+      <div class="explanation-box" id="q-explanation"></div>
+      <div class="q-bottom-nav">
+        <button class="btn btn-outline" id="btn-prev" onclick="goTo(currentQ - 1)">← Previous</button>
+        <div class="answered-status" id="answered-status"></div>
+        <button class="btn btn-primary" id="btn-next" onclick="goTo(currentQ + 1)">Next →</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════════════ RESULTS ═══════════════════ -->
+<div id="results"></div>
+
+<!-- Submit Modal -->
+<div class="modal-overlay" id="submit-modal">
+  <div class="modal">
+    <h2>Submit Exam?</h2>
+    <p id="submit-modal-msg">You have <strong id="unanswered-count">0</strong> unanswered questions. Are you sure you want to submit?</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeSubmitModal()">Go Back</button>
+      <button class="btn btn-danger" onclick="submitExam()">Submit Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Time Up Modal -->
+<div class="modal-overlay" id="timeup-modal">
+  <div class="modal">
+    <h2>⏱ Time's Up!</h2>
+    <p>Your 120-minute exam time has expired. Your answers have been recorded and your exam is being submitted now.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="submitExam()">View Results</button>
+    </div>
+  </div>
 </div>
 
 <script>
-const QUESTIONS = [
-  // ── DELTA LAKE ──
-  {
-    cat: "Delta Lake",
-    q: "Which Delta Lake command allows you to remove old data files no longer referenced by the current table version?",
-    opts: ["OPTIMIZE", "VACUUM", "ZORDER BY", "PURGE"],
-    ans: 1,
-    exp: "VACUUM removes files no longer referenced by a Delta table and older than the retention threshold (default 7 days). OPTIMIZE compacts small files and can use ZORDER for co-location."
-  },
-  {
-    cat: "Delta Lake",
-    q: "What does the following command do?\n\nDESCRIBE HISTORY my_table LIMIT 5",
-    opts: ["Shows DDL of the last 5 columns", "Returns the 5 most recent transaction log entries", "Deletes the 5 oldest table versions", "Displays 5 sample rows from the table"],
-    ans: 1,
-    exp: "DESCRIBE HISTORY returns audit information from the Delta transaction log including operation, timestamp, and user. LIMIT restricts the number of versions returned."
-  },
-  {
-    cat: "Delta Lake",
-    q: "A data engineer needs to read a Delta table as it existed 3 days ago. Which syntax is correct?",
-    opts: [
-      "SELECT * FROM my_table VERSION AS OF -3",
-      "SELECT * FROM my_table TIMESTAMP AS OF date_sub(current_timestamp(), 3)",
-      "SELECT * FROM my_table AT SNAPSHOT 3",
-      "SELECT * FROM my_table RESTORE TO 3 DAYS"
-    ],
-    ans: 1,
-    exp: "Delta Lake Time Travel supports TIMESTAMP AS OF (using a timestamp expression) or VERSION AS OF (using a version number). date_sub(current_timestamp(), 3) correctly computes the timestamp 3 days ago."
-  },
-  {
-    cat: "Delta Lake",
-    q: "Which statement about Delta Lake ACID transactions is TRUE?",
-    opts: [
-      "Delta Lake only supports Atomicity and Consistency but not Isolation",
-      "Multiple writers can concurrently write to the same table without any coordination",
-      "Delta Lake uses optimistic concurrency control with conflict detection at commit time",
-      "Delta Lake requires an external lock manager like ZooKeeper for ACID guarantees"
-    ],
-    ans: 2,
-    exp: "Delta Lake uses optimistic concurrency control. Writers proceed without locks, and at commit time the transaction log is checked for conflicts. If conflicts exist, one transaction is retried."
-  },
-  {
-    cat: "Delta Lake",
-    q: "What is the primary purpose of the _delta_log directory in a Delta table?",
-    opts: [
-      "Storing raw Parquet data files",
-      "Caching query results for faster reads",
-      "Maintaining the transaction log as JSON and checkpoint files",
-      "Holding schema evolution metadata only"
-    ],
-    ans: 2,
-    exp: "The _delta_log directory contains JSON files for each transaction commit and periodic Parquet checkpoint files that summarize the log up to a given version, enabling efficient state reconstruction."
-  },
-  {
-    cat: "Delta Lake",
-    q: "A team runs OPTIMIZE with ZORDER BY (city, date) on a large Delta table. What is the expected outcome?",
-    opts: [
-      "Rows are sorted globally by city then date across all files",
-      "Small files are compacted and data is co-located by city and date within each file, improving data skipping",
-      "A B-tree index is created on the city and date columns",
-      "Duplicate rows with the same city and date are removed"
-    ],
-    ans: 1,
-    exp: "ZORDER BY performs multi-dimensional clustering within the compacted files, enabling Delta's data skipping feature to skip files where the predicate columns don't match the query filter."
-  },
-  {
-    cat: "Delta Lake",
-    q: "Which command would you use to revert a Delta table to version 10?",
-    opts: [
-      "RESTORE TABLE my_table TO VERSION AS OF 10",
-      "SELECT * FROM my_table VERSION AS OF 10 INTO my_table",
-      "ROLLBACK TABLE my_table VERSION 10",
-      "ALTER TABLE my_table RESTORE 10"
-    ],
-    ans: 0,
-    exp: "RESTORE TABLE ... TO VERSION AS OF is the correct syntax to revert a Delta table to a prior version. It adds a new commit to the transaction log that recreates the prior state."
-  },
-  {
-    cat: "Delta Lake",
-    q: "What happens when you enable Change Data Feed (CDF) on a Delta table?",
-    opts: [
-      "The table is converted to a streaming source automatically",
-      "Delta records row-level changes (insert, update, delete) that can be queried with table_changes()",
-      "All historical versions of rows are deduplicated on read",
-      "Write operations become synchronous and return the changed rows"
-    ],
-    ans: 1,
-    exp: "Change Data Feed captures row-level changes in the _change_data directory. You can query changes using the table_changes() function with a starting version or timestamp, useful for incremental processing."
-  },
+// ════════════════════════════════════════
+//  QUESTION BANK  (90 questions)
+// ════════════════════════════════════════
+const ALL_QUESTIONS = [
+// ─── DOMAIN 1: Databricks Lakehouse Platform ───────────────────────────────
+{
+  domain: "Lakehouse Platform",
+  q: "Which of the following best describes the core architectural principle of the Databricks Lakehouse?",
+  opts: ["A managed cloud data warehouse that stores data in proprietary columnar format", "An architecture that combines the flexibility and low cost of data lakes with the data management and ACID capabilities of data warehouses", "A streaming-only platform built on top of Apache Kafka and Flink", "A unified serving layer that replaces both OLTP and OLAP systems"],
+  ans: 1,
+  exp: "The Lakehouse combines the scalability and cost-efficiency of data lakes (open storage formats like Parquet/Delta on object storage) with the reliability, governance, and performance features of data warehouses (ACID transactions, schema enforcement, BI support)."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A data engineer needs the lowest-latency interactive SQL queries on a Delta table shared with BI tools. Which Databricks compute resource is most appropriate?",
+  opts: ["A standard job cluster", "A SQL Warehouse (Serverless or Pro)", "A single-node all-purpose cluster", "A streaming cluster with micro-batch triggers"],
+  ans: 1,
+  exp: "SQL Warehouses (formerly SQL Endpoints) are purpose-built for BI and SQL analytics workloads. They support features like Photon acceleration, result caching, and auto-scaling, delivering low-latency query performance for BI tools."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "What is the key difference between an all-purpose cluster and a job cluster in Databricks?",
+  opts: ["All-purpose clusters support Python; job clusters only support SQL", "All-purpose clusters are persistent and interactive; job clusters are created on-demand for a job and terminated upon completion", "Job clusters have unlimited memory; all-purpose clusters are capped at 64 GB", "All-purpose clusters cannot run notebooks; they only execute JAR files"],
+  ans: 1,
+  exp: "All-purpose clusters are manually started, support interactive development, and can be shared. Job clusters are created automatically when a job runs and are terminated when it completes, making them cost-efficient for production."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "Which file format underpins Delta Lake tables and is used to store the actual data?",
+  opts: ["ORC", "Avro", "Parquet", "JSON"],
+  ans: 2,
+  exp: "Delta Lake stores data in Parquet files. The Delta Lake layer adds the transaction log (_delta_log) on top of Parquet to provide ACID guarantees, time travel, and schema enforcement."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A team wants to share a Delta table with an external Spark cluster that does not use Databricks. Which feature allows this without copying data?",
+  opts: ["Delta Sharing", "Unity Catalog External Tables", "DBFS Mount Points", "Databricks Connect"],
+  ans: 0,
+  exp: "Delta Sharing is an open protocol for secure data sharing across organizations and platforms. It allows sharing Delta tables without copying data and is accessible by non-Databricks Spark clusters and other clients."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A data engineer runs a notebook interactively and gets results. Later, the same notebook is run as a Databricks Job. Which statement is TRUE about the job run?",
+  opts: ["Jobs always run on all-purpose clusters to ensure compatibility", "Jobs use job clusters by default, which terminate after the run and are cheaper than all-purpose clusters", "Job clusters persist for 24 hours after the job finishes for debugging", "Notebooks cannot be run as jobs; only Python scripts can"],
+  ans: 1,
+  exp: "Job clusters are ephemeral: created at job start, terminated at job end. They are more cost-effective than all-purpose clusters for scheduled/automated workloads."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "What does DBFS (Databricks File System) represent?",
+  opts: ["A proprietary binary file format replacing Parquet", "A distributed file system that abstracts cloud object storage (S3, ADLS, GCS) and provides a unified file path interface", "An on-disk NFS mount available only on the driver node", "A metadata catalog that tracks all files across workspaces"],
+  ans: 1,
+  exp: "DBFS is a distributed file system layer mounted to Databricks workspaces. It abstracts cloud object storage, allowing you to interact with S3/ADLS/GCS using familiar file-path syntax like /mnt/ or dbfs:/ paths."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A Databricks workspace is configured with a Unity Catalog metastore. Where is the metadata for tables stored by default?",
+  opts: ["In a PostgreSQL database on the driver node", "In the Unity Catalog metastore managed by Databricks, with data files in the associated cloud storage", "In the Hive metastore embedded in each cluster", "In Apache Zookeeper coordination nodes"],
+  ans: 1,
+  exp: "Unity Catalog is a centralized governance layer managed by Databricks. Metadata (table definitions, permissions, lineage) is stored in the Databricks-managed metastore, while actual data files reside in your cloud storage account."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "Databricks Repos allows data engineers to do which of the following?",
+  opts: ["Deploy ML models to production serving endpoints", "Integrate with Git providers to version-control notebooks and files in a workspace", "Share Delta tables across workspaces without copying data", "Create serverless functions triggered by cloud events"],
+  ans: 1,
+  exp: "Databricks Repos enables Git integration within workspaces. Engineers can clone repositories, commit changes, create branches, and collaborate using standard Git workflows directly from the Databricks UI."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "What is the primary purpose of the Photon engine in Databricks?",
+  opts: ["To accelerate deep learning model training using GPU clusters", "To provide a native vectorized C++ query engine that speeds up SQL and DataFrame operations significantly", "To enable real-time streaming with sub-millisecond latency", "To automatically partition tables based on query patterns"],
+  ans: 1,
+  exp: "Photon is a native vectorized execution engine written in C++ that speeds up SQL and DataFrame workloads on Apache Spark. It processes batches of data in columnar format, delivering significant performance improvements especially for SQL queries."
+},
 
-  // ── STRUCTURED STREAMING ──
-  {
-    cat: "Structured Streaming",
-    q: "What does the trigger(availableNow=True) option do in a Structured Streaming query?",
-    opts: [
-      "Runs the stream continuously with micro-batches",
-      "Processes all available data and stops, similar to a batch job",
-      "Triggers one micro-batch every second",
-      "Enables exactly-once processing semantics"
-    ],
-    ans: 1,
-    exp: "availableNow=True processes all data available at query start in one or more micro-batches and then stops. It gives batch-like behavior with streaming guarantees like checkpointing."
-  },
-  {
-    cat: "Structured Streaming",
-    q: "Which output mode writes only new rows added to the result table since the last trigger?",
-    opts: ["Complete", "Append", "Update", "Delta"],
-    ans: 1,
-    exp: "Append mode outputs only new rows. Complete mode outputs the entire result table each trigger. Update mode outputs only changed rows. Delta is not a streaming output mode."
-  },
-  {
-    cat: "Structured Streaming",
-    q: "A streaming query fails mid-way. After fixing the issue, the engineer restarts the job. Which mechanism ensures processing continues from where it stopped?",
-    opts: [
-      "Watermarking",
-      "The checkpoint location",
-      "The trigger interval",
-      "The output sink"
-    ],
-    ans: 1,
-    exp: "The checkpoint location stores the streaming query's progress (offsets processed and committed) in durable storage. On restart, the engine reads the checkpoint to resume from the exact position."
-  },
-  {
-    cat: "Structured Streaming",
-    q: "What is the purpose of withWatermark() in Structured Streaming?",
-    opts: [
-      "To define the trigger interval between micro-batches",
-      "To set a threshold for late-arriving data beyond which events are dropped from aggregations",
-      "To specify the output mode of the stream",
-      "To partition the output by event time"
-    ],
-    ans: 1,
-    exp: "withWatermark() specifies the maximum lateness of event data. Events older than (max seen event time - watermark threshold) are dropped, allowing the engine to limit state size and produce results."
-  },
-  {
-    cat: "Structured Streaming",
-    q: "Which source is NOT natively supported by Spark Structured Streaming as a streaming source?",
-    opts: ["Apache Kafka", "Delta Lake", "Auto Loader (cloudFiles)", "PostgreSQL JDBC"],
-    ans: 3,
-    exp: "PostgreSQL via JDBC is a batch source and cannot natively be used as a streaming source in Structured Streaming. Kafka, Delta, and Auto Loader (cloudFiles) are all supported streaming sources."
-  },
-  {
-    cat: "Structured Streaming",
-    q: "A streaming job uses foreachBatch to write to multiple sinks. What is a key advantage of this approach?",
-    opts: [
-      "Automatic schema evolution across sinks",
-      "The micro-batch DataFrame can be reused to write to multiple outputs with arbitrary transformations",
-      "It enables Continuous Processing mode",
-      "foreachBatch removes the need for a checkpoint"
-    ],
-    ans: 1,
-    exp: "foreachBatch provides the micro-batch DataFrame and batch ID, allowing you to apply arbitrary batch operations, write to multiple sinks, and implement idempotency using the batch ID."
-  },
+// ─── DOMAIN 2: ELT with Apache Spark & Python ─────────────────────────────
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer reads a large CSV file and applies filter(), select(), and withColumn() transformations. When is data actually processed?",
+  opts: ["Immediately after each transformation is called", "After the first transformation that returns a non-null result", "Only when an action such as count(), show(), or write() is called", "When the DataFrame is assigned to a variable"],
+  ans: 2,
+  exp: "Spark uses lazy evaluation. Transformations build a logical plan (DAG) but don't execute until an action is called. Actions like count(), show(), collect(), or write() trigger the actual computation."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which Spark function creates a new column by applying a custom Python function row-by-row?",
+  opts: ["df.apply()", "df.withColumn() with a UDF registered via spark.udf.register()", "df.map()", "df.transform()"],
+  ans: 1,
+  exp: "User-Defined Functions (UDFs) allow custom Python logic per row. You register a Python function with @udf or spark.udf.register(), then apply it in withColumn(). Note: UDFs have serialization overhead; prefer built-in functions when possible."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "What is the output of the following code?\n\ndf = spark.range(5)\ndf.filter(col('id') > 2).count()",
+  code: "df = spark.range(5)\ndf.filter(col('id') > 2).count()",
+  opts: ["2", "3", "4", "5"],
+  ans: 0,
+  exp: "spark.range(5) creates IDs 0,1,2,3,4. Filtering id > 2 retains 3 and 4 — that's 2 rows. count() returns 2."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer needs to read a JSON file where each line is a separate JSON object. Which read format is correct?",
+  opts: ["spark.read.format('json').option('multiLine', True)", "spark.read.json(path) with default settings (each line is one record)", "spark.read.text(path).from_json()", "spark.read.format('jsonl').load(path)"],
+  ans: 1,
+  exp: "By default, spark.read.json() treats each line as a separate JSON object (JSON Lines format). The multiLine=True option is for files with a single JSON object spanning multiple lines."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which join type returns all rows from both DataFrames, with nulls where there is no match?",
+  opts: ["inner", "left", "right", "outer (full outer)"],
+  ans: 3,
+  exp: "A full outer join (outer) returns all rows from both sides. Where a match exists, columns from both sides are populated. Where there's no match on either side, the missing columns are filled with null."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A DataFrame has columns: name (string), age (int), salary (double). What does the following return?\n\ndf.select(avg('salary'), max('age')).show()",
+  code: "df.select(avg('salary'), max('age')).show()",
+  opts: ["A single row with the average salary and maximum age across the entire DataFrame", "One row per unique name with average salary and max age", "An error because avg and max require groupBy first", "Two separate DataFrames, one for each aggregation"],
+  ans: 0,
+  exp: "When aggregation functions like avg() and max() are used directly in select() without groupBy(), they compute global aggregates across the entire DataFrame, returning a single row."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which method persists a DataFrame to a specific storage level (e.g., MEMORY_AND_DISK)?",
+  opts: ["df.cache()", "df.persist(StorageLevel.MEMORY_AND_DISK)", "df.checkpoint()", "df.store(StorageLevel.MEMORY_AND_DISK)"],
+  ans: 1,
+  exp: "df.persist() accepts a StorageLevel argument for fine-grained control. df.cache() is a shorthand for MEMORY_AND_DISK_DESER (Spark 3) or MEMORY_ONLY (older). persist() gives you explicit control over the storage strategy."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A table has rows with null values in a 'region' column. Which expression correctly replaces nulls with 'UNKNOWN'?",
+  opts: ["df.filter(col('region').isNotNull())", "df.withColumn('region', col('region').otherwise('UNKNOWN'))", "df.withColumn('region', coalesce(col('region'), lit('UNKNOWN')))", "df.fillna({'region': 'UNKNOWN'})"],
+  ans: 2,
+  exp: "coalesce() returns the first non-null value from a list of columns/expressions. coalesce(col('region'), lit('UNKNOWN')) returns 'region' if not null, else 'UNKNOWN'. fillna() also works here — both B and D are valid, but coalesce() is the canonical column-level approach."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "What does the explode() function do in Spark?",
+  opts: ["Splits a string column by a delimiter into multiple columns", "Transforms each element of an array or map column into a separate row", "Increases the number of partitions by splitting large partitions", "Unnests nested JSON into a flat schema"],
+  ans: 1,
+  exp: "explode() takes an array or map column and creates one row per element. For example, a row with array [A, B, C] becomes 3 rows, one for each element. This is key for working with nested/semi-structured data."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer uses the following schema inference approach. What is the risk?\n\nspark.read.format('csv').option('inferSchema', 'true').load(path)",
+  code: "spark.read.format('csv')\n  .option('inferSchema', 'true')\n  .load(path)",
+  opts: ["inferSchema is not supported for CSV files", "Schema inference reads the entire file to determine types, which is slow and can produce incorrect types on production data", "inferSchema always returns all columns as StringType", "The resulting DataFrame will have no column names"],
+  ans: 1,
+  exp: "inferSchema requires a full data scan to determine types, which is slow for large files. Additionally, inferred types can be wrong (e.g., a mostly-integer column with one string value). In production, always specify an explicit schema with StructType."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which function converts a column of Unix timestamps (seconds since epoch) to a timestamp type?",
+  opts: ["to_timestamp()", "from_unixtime()", "cast('timestamp')", "date_format()"],
+  ans: 1,
+  exp: "from_unixtime() converts a numeric Unix timestamp (seconds since epoch) to a timestamp string, which can then be cast to timestamp type. to_timestamp() parses a string column with a format pattern."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer writes:\n\ndf.write.mode('overwrite').partitionBy('year','month').format('delta').save('/data/events')\n\nWhat happens if the table already exists?",
+  code: "df.write.mode('overwrite')\n  .partitionBy('year','month')\n  .format('delta')\n  .save('/data/events')",
+  opts: ["Raises an AnalysisException because the table exists", "Appends new data to existing partitions", "Replaces only the partitions present in df, leaving other partitions untouched (dynamic partition overwrite)", "Deletes all existing data and writes only the new data"],
+  ans: 2,
+  exp: "With Delta Lake and mode('overwrite') + partitionBy(), by default only partitions present in the new DataFrame are replaced (dynamic partition overwrite). Partitions not in the new data remain intact. This behavior can be controlled with spark.sql.sources.partitionOverwriteMode."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which Spark SQL function generates a unique, monotonically increasing ID per row — but not necessarily consecutive?",
+  opts: ["row_number()", "monotonically_increasing_id()", "rank()", "dense_rank()"],
+  ans: 1,
+  exp: "monotonically_increasing_id() generates unique 64-bit integers that are monotonically increasing but not consecutive (they encode partition ID in the upper bits). row_number() requires a window spec and produces consecutive integers within partitions."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer wants to pivot a DataFrame so that distinct values in the 'quarter' column become separate columns. Which method is correct?",
+  opts: ["df.unpivot('quarter')", "df.groupBy('year').pivot('quarter').agg(sum('revenue'))", "df.melt(id_vars='year', value_vars='quarter')", "df.transpose('quarter', 'revenue')"],
+  ans: 1,
+  exp: "pivot() is used with groupBy() and an aggregation function to reshape data from long to wide format. Each distinct value in the pivot column becomes a new column, with aggregated values filled in."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "What does the following Spark SQL query return?\n\nSELECT DISTINCT customer_id FROM orders WHERE order_date >= '2024-01-01'",
+  code: "SELECT DISTINCT customer_id\nFROM orders\nWHERE order_date >= '2024-01-01'",
+  opts: ["All columns of the orders table filtered by date", "Unique customer IDs who placed an order in 2024 or later", "A count of distinct customers", "An error because DISTINCT must be inside COUNT()"],
+  ans: 1,
+  exp: "SELECT DISTINCT customer_id returns unique values of customer_id satisfying the WHERE predicate. It's equivalent to df.filter(...).select('customer_id').distinct() in the DataFrame API."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer notices that after a groupBy().agg() operation, the resulting DataFrame has exactly 200 partitions regardless of data size. Why?",
+  opts: ["groupBy always outputs exactly 200 rows", "The default value of spark.sql.shuffle.partitions is 200, which controls output partitions after a shuffle", "200 is the maximum number of partitions Spark supports", "The driver automatically limits partitions to 200 for memory safety"],
+  ans: 1,
+  exp: "After any shuffle (triggered by groupBy, join, sort, etc.), Spark creates spark.sql.shuffle.partitions partitions (default: 200). For large datasets this may be too few; for small datasets, too many. Tune with spark.conf.set() or enable AQE for automatic tuning."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which statement about DataFrames and Datasets in Spark is TRUE?",
+  opts: ["Datasets are available in Python and provide compile-time type safety", "DataFrames are a special case of Dataset[Row] and are the primary abstraction used in Python (PySpark)", "Datasets always outperform DataFrames because of JVM optimizations", "DataFrames require explicit schema definition and cannot infer schema"],
+  ans: 1,
+  exp: "In Spark, DataFrame is Dataset[Row]. In Python (PySpark), you always work with DataFrames because Python lacks compile-time type checking. The Dataset API with type safety is a Scala/Java feature."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer wants to add a column 'full_name' by concatenating 'first_name' and 'last_name' with a space. Which expression is correct?",
+  opts: ["df.withColumn('full_name', col('first_name') + ' ' + col('last_name'))", "df.withColumn('full_name', concat(col('first_name'), lit(' '), col('last_name')))", "df.withColumn('full_name', col('first_name').concat(col('last_name')))", "df.withColumn('full_name', format_string('%s %s', 'first_name', 'last_name'))"],
+  ans: 1,
+  exp: "The concat() function concatenates multiple string columns/literals. lit(' ') creates a literal space column. Option A uses Python string concatenation which doesn't work on Column objects. format_string can also work but requires column references differently."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A DataFrame with 1 billion rows needs to be written as a single file. Which approach accomplishes this?",
+  opts: ["df.write.option('maxRecordsPerFile', 1000000000).save(path)", "df.coalesce(1).write.save(path)", "df.repartition(1).write.save(path)", "Both B and C achieve the same result, though coalesce(1) avoids a full shuffle"],
+  ans: 3,
+  exp: "Both coalesce(1) and repartition(1) produce a single output file. coalesce(1) avoids a full shuffle by merging partitions on the executors that already hold the data — it's more efficient. repartition(1) always does a full shuffle. For 1 billion rows, both work but coalesce is preferred."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "What is the purpose of the broadcast() hint in Spark joins?",
+  opts: ["To replicate the larger DataFrame to avoid join failures on skewed data", "To send a copy of a small DataFrame to every executor, avoiding a shuffle join for the large DataFrame", "To partition the join output evenly across all executors", "To cache the join result in memory for repeated access"],
+  ans: 1,
+  exp: "broadcast() hints that the marked DataFrame should be sent (broadcast) to all executors. This converts a sort-merge join into a broadcast hash join, eliminating the shuffle of the larger DataFrame and dramatically speeding up the join when one side is small."
+},
 
-  // ── AUTO LOADER ──
-  {
-    cat: "Auto Loader",
-    q: "What is Auto Loader's primary advantage over a standard spark.read.format('parquet').load() for ingesting cloud storage files?",
-    opts: [
-      "Auto Loader can read from multiple cloud providers simultaneously",
-      "Auto Loader incrementally ingests only new files as they arrive, using file notification or directory listing",
-      "Auto Loader automatically infers and evolves the schema without any configuration",
-      "Auto Loader always uses Continuous Processing mode for lower latency"
-    ],
-    ans: 1,
-    exp: "Auto Loader (cloudFiles) tracks which files have already been ingested using checkpoint metadata and processes only new files incrementally, making it efficient for large-scale cloud storage ingestion."
-  },
-  {
-    cat: "Auto Loader",
-    q: "Which Auto Loader option enables automatic schema inference AND evolution, merging new columns into the target schema?",
-    opts: [
-      "cloudFiles.schemaLocation only",
-      "cloudFiles.inferColumnTypes = true",
-      "cloudFiles.schemaEvolutionMode = 'addNewColumns' with cloudFiles.schemaLocation set",
-      "mergeSchema = true in the writeStream options"
-    ],
-    ans: 2,
-    exp: "Setting cloudFiles.schemaEvolutionMode to 'addNewColumns' with a schemaLocation specified allows Auto Loader to detect new columns in incoming files and merge them into the schema automatically."
-  },
+// ─── DOMAIN 3: Incremental Data Processing ────────────────────────────────
+{
+  domain: "Incremental Data Processing",
+  q: "A data engineer uses Auto Loader to ingest files from an S3 bucket. What mechanism does Auto Loader use by default to discover new files?",
+  opts: ["Polling the S3 bucket every minute via the AWS SDK", "Directory listing, with an option to switch to file notification via cloud storage events (SNS/SQS)", "Kafka topic subscription for file arrival events", "JDBC polling of an S3 inventory table"],
+  ans: 1,
+  exp: "By default, Auto Loader uses directory listing to discover files, which works without additional setup. For high-throughput scenarios, it can be switched to file notification mode using cloud events (S3+SQS, ADLS+Event Grid), which is more scalable and efficient."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "Which Delta Lake feature allows a streaming query to pick up changes to a Delta table since a given version?",
+  opts: ["DESCRIBE HISTORY", "readStream with startingVersion option", "Time Travel with TIMESTAMP AS OF", "VACUUM with RETAIN 0 HOURS"],
+  ans: 1,
+  exp: "When reading a Delta table as a streaming source with spark.readStream.format('delta').option('startingVersion', N).table('...'), the stream picks up changes (inserts/updates/deletes) from version N onward, enabling incremental processing of CDC data."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "A Structured Streaming query processes data from Kafka and writes results to a Delta table. The job fails after 3 hours. Which mechanism allows it to resume without reprocessing data?",
+  opts: ["Kafka consumer group offset management alone", "The checkpoint location specified in writeStream.option('checkpointLocation', path)", "Spark's built-in driver memory recovery", "The Delta transaction log of the output table"],
+  ans: 1,
+  exp: "The checkpoint location stores the streaming query's progress — specifically, the read offsets (Kafka offsets in this case) and committed output. On restart, Spark reads the checkpoint and resumes exactly where it left off, providing exactly-once semantics end-to-end."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "In Structured Streaming, which output mode should be used when writing aggregated results (e.g., running counts) to a Delta table?",
+  opts: ["Append — to avoid rewriting unchanged records", "Complete — to always write the full result table", "Update — to write only rows that changed since the last trigger", "Both Update and Complete are valid; Append is invalid for aggregations without watermark"],
+  ans: 3,
+  exp: "For aggregations, Append mode is only supported with watermarking (to finalize results). Complete and Update are the typical choices. Complete rewrites the full table each trigger; Update writes only changed rows. Both are valid for Delta output."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "A streaming job uses withWatermark('event_time', '10 minutes'). What happens to events arriving more than 10 minutes late?",
+  opts: ["They are written to a separate late-events Delta table for reprocessing", "They are included in the current window and trigger a window recomputation", "They are silently dropped and not included in any aggregation results", "The job fails with a LateDataException"],
+  ans: 2,
+  exp: "Watermarking defines the maximum lateness threshold. Events older than (max event time seen – watermark duration) are considered too late and are dropped from aggregations. This allows the engine to clean up intermediate state."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "What does APPLY CHANGES INTO in Delta Live Tables accomplish?",
+  opts: ["Merges a batch DataFrame into a Delta table using custom merge conditions", "Processes CDC (Change Data Capture) events and applies them as inserts/updates/deletes to a materialized target table", "Incrementally computes aggregations and appends results to a summary table", "Performs schema evolution by adding new columns from incoming data"],
+  ans: 1,
+  exp: "APPLY CHANGES INTO is DLT's CDC processing primitive. It reads a source with insert/update/delete event records and applies them to a target table in the correct order, maintaining a current-state table. It supports SCD Type 1 (overwrite) and Type 2 (history)."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "Which trigger type processes all available data in one or more micro-batches and then automatically stops the streaming query?",
+  opts: ["trigger(processingTime='0 seconds')", "trigger(once=True)", "trigger(availableNow=True)", "trigger(continuous='1 second')"],
+  ans: 2,
+  exp: "trigger(availableNow=True) is the modern replacement for trigger(once=True). It processes all available data efficiently (potentially in multiple micro-batches for better parallelism) and then stops, combining streaming semantics with batch-like execution."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "A data engineer needs to deduplicate streaming events using an event_id that may arrive within a 1-hour window. Which approach is correct?",
+  opts: ["df.dropDuplicates(['event_id'])", "df.withWatermark('event_time', '1 hour').dropDuplicates(['event_id', 'event_time'])", "df.distinct() in the streaming query", "Deduplication is not supported in Structured Streaming"],
+  ans: 1,
+  exp: "Streaming deduplication requires withWatermark() to bound the state (how long to remember seen IDs). dropDuplicates() on a streaming DataFrame with watermark will deduplicate events within the watermark window, after which state is cleared."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "What is the purpose of the schema location (cloudFiles.schemaLocation) option in Auto Loader?",
+  opts: ["Specifies where to write the inferred schema as a Delta table for auditing", "Stores the inferred schema and tracks schema changes across runs, enabling schema evolution", "Defines the target schema that all incoming files must match exactly", "Points to an external Glue catalog for schema lookup"],
+  ans: 1,
+  exp: "cloudFiles.schemaLocation is a directory where Auto Loader persists the inferred schema across runs. This enables schema evolution tracking: when new columns appear, Auto Loader can detect them and evolve the target schema accordingly."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "A DLT pipeline is defined with a STREAMING TABLE reading from Auto Loader, and a MATERIALIZED VIEW aggregating that table. What happens when new files arrive?",
+  opts: ["The entire pipeline is recomputed from scratch for every new file", "Only the streaming table processes the new files incrementally; the materialized view is fully recomputed", "Both the streaming table and the materialized view update incrementally", "Auto Loader does not work within DLT pipelines"],
+  ans: 1,
+  exp: "STREAMING TABLES in DLT process only new data incrementally (using Auto Loader's checkpoint). MATERIALIZED VIEWS are fully recomputed each pipeline run — they don't maintain incremental state. For incremental aggregations, use STREAMING TABLES with aggregation logic."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "A Structured Streaming query reads from Delta Lake. The engineer wants it to process only new data appended after a specific timestamp. Which option achieves this?",
+  opts: [".option('startingTimestamp', '2024-06-01T00:00:00')", ".option('startingVersion', '2024-06-01')", ".filter(col('_commit_timestamp') >= '2024-06-01')", ".option('readChangeFeed', 'true').option('startingTimestamp', '2024-06-01')"],
+  ans: 0,
+  exp: "When reading Delta as a streaming source, startingTimestamp tells the stream to begin processing commits made at or after that timestamp. startingVersion uses a Delta version number instead. readChangeFeed enables Change Data Feed for CDC data."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "Which DLT decorator marks a Python function as a data quality expectation that drops rows failing the condition without stopping the pipeline?",
+  opts: ["@dlt.expect('valid_id', 'id IS NOT NULL')", "@dlt.expect_or_fail('valid_id', 'id IS NOT NULL')", "@dlt.expect_or_drop('valid_id', 'id IS NOT NULL')", "@dlt.constraint('valid_id', 'id IS NOT NULL')"],
+  ans: 2,
+  exp: "@dlt.expect() warns on violations but keeps all rows. @dlt.expect_or_drop() removes rows violating the constraint and logs the count. @dlt.expect_or_fail() halts the pipeline on any violation. There is no @dlt.constraint decorator."
+},
 
-  // ── MEDALLION ARCHITECTURE ──
-  {
-    cat: "Medallion Architecture",
-    q: "In the Medallion (Bronze/Silver/Gold) architecture, what is the primary purpose of the Bronze layer?",
-    opts: [
-      "Storing cleaned, deduplicated, and enriched data ready for analysis",
-      "Landing raw data from source systems with minimal transformations, preserving the original data",
-      "Storing pre-aggregated business metrics for BI tools",
-      "Hosting ML feature tables for model training"
-    ],
-    ans: 1,
-    exp: "Bronze is the raw ingestion layer. It stores data exactly as received from sources (or with minor additions like ingestion timestamps), serving as the single source of truth and audit trail."
-  },
-  {
-    cat: "Medallion Architecture",
-    q: "A data engineer is designing a pipeline from Bronze to Silver. Which transformations are MOST appropriate at the Silver layer?",
-    opts: [
-      "Aggregating daily sales by region and product category",
-      "Storing Kafka messages as raw bytes",
-      "Deduplicating records, casting data types, and applying data quality rules",
-      "Training machine learning models on cleansed data"
-    ],
-    ans: 2,
-    exp: "The Silver layer typically includes cleansing operations: deduplication, type casting, null handling, standardization, and data quality validation — producing a reliable, conformed dataset."
-  },
-  {
-    cat: "Medallion Architecture",
-    q: "Which layer of the Medallion architecture is most appropriate for storing aggregated KPIs used directly by a BI dashboard?",
-    opts: ["Bronze", "Silver", "Gold", "Platinum"],
-    ans: 2,
-    exp: "Gold tables contain business-level aggregations and metrics, optimized for consumption by BI tools, reporting, and business stakeholders. They represent the final, business-ready layer."
-  },
+// ─── DOMAIN 4: Production Pipelines ──────────────────────────────────────
+{
+  domain: "Production Pipelines",
+  q: "A Databricks Job has three tasks: A → B → C (sequential). Task B fails. What happens by default?",
+  opts: ["Tasks A and C are retried automatically", "Task C is skipped and the job is marked as failed", "Task B is retried indefinitely until it succeeds", "The job sends an alert and waits for manual intervention before continuing"],
+  ans: 1,
+  exp: "By default, if a task fails, downstream tasks that depend on it are skipped and the job is marked as Failed. You can configure retries per task and set up notifications (email/Slack) for failures via the job UI."
+},
+{
+  domain: "Production Pipelines",
+  q: "A data engineer wants to trigger a Databricks Job automatically when a new file lands in an S3 bucket. Which approach is MOST appropriate?",
+  opts: ["Configure a file arrival trigger in the Databricks Jobs UI", "Use a Databricks Workflow with an Auto Loader streaming task", "Poll S3 every minute with a Lambda function that calls the Jobs REST API", "Use a cron schedule set to run every minute"],
+  ans: 0,
+  exp: "Databricks Jobs supports file arrival triggers (for ADLS, S3, GCS) natively. The job starts automatically when a new file matching the specified path pattern arrives, without needing external orchestration."
+},
+{
+  domain: "Production Pipelines",
+  q: "Which Databricks feature enables CI/CD for notebooks, jobs, and pipelines using YAML configuration files that can be version-controlled in Git?",
+  opts: ["Databricks Repos", "Databricks Asset Bundles (DABs)", "MLflow Projects", "Databricks Connect"],
+  ans: 1,
+  exp: "Databricks Asset Bundles (DABs) let you define all Databricks resources (jobs, DLT pipelines, model serving) in YAML files using the Databricks CLI. These files are version-controlled in Git and can be deployed across environments (dev/staging/prod)."
+},
+{
+  domain: "Production Pipelines",
+  q: "A DLT pipeline is set to DEVELOPMENT mode. What is the key difference from PRODUCTION mode?",
+  opts: ["Development mode uses more expensive compute for faster iteration", "In Development mode, the cluster is reused across pipeline runs (not terminated after each run) for faster iteration; Production terminates the cluster after each run", "Development mode disables data quality expectations (expectations are ignored)", "Production mode limits the pipeline to 10 tables maximum"],
+  ans: 1,
+  exp: "Development mode keeps the cluster alive between pipeline runs for faster iteration (no cluster startup overhead). Production mode terminates the cluster after each run for cost savings and runs with automatic recovery on failure."
+},
+{
+  domain: "Production Pipelines",
+  q: "A data engineer configures a Databricks Job with max_retries=3 and min_retry_interval=60. Task A fails with an OOM error. What happens?",
+  opts: ["The job immediately fails with no retries since OOM errors are non-retriable", "The task retries up to 3 times, waiting at least 60 seconds between attempts", "The cluster is automatically resized and the task retried once", "Retries only apply to network errors, not OOM errors"],
+  ans: 1,
+  exp: "Databricks Job retry configuration applies regardless of the error type unless specifically excluded. With max_retries=3 and min_retry_interval=60, the task will be retried up to 3 times with at least 60-second gaps. For OOM, consider also increasing memory or optimizing the query."
+},
+{
+  domain: "Production Pipelines",
+  q: "A team uses multiple Databricks Workflows that share common data transformation logic. What is the BEST practice for code reuse?",
+  opts: ["Copy-paste the logic into each workflow task notebook", "Package shared logic as a Python library (wheel file) and install it on clusters via init scripts or cluster libraries", "Use %run magic to include another notebook in each task", "Hardcode the logic into a SQL warehouse procedure"],
+  ans: 1,
+  exp: "Packaging shared logic as a Python wheel and installing it as a cluster library is the production-grade approach. It ensures versioning, testability, and consistent use across jobs. %run works but creates tight coupling between notebooks."
+},
+{
+  domain: "Production Pipelines",
+  q: "A data engineer wants to monitor a Databricks Job and receive a Slack notification when it fails. How is this configured?",
+  opts: ["By adding a print() statement with a Slack webhook URL to the notebook", "Through the Job's notification settings, which support email and webhook (Slack) alerts on start, success, and failure", "By creating a separate monitoring job that polls the Jobs API every minute", "Slack notifications are not supported; only email notifications are available"],
+  ans: 1,
+  exp: "Databricks Jobs has built-in notification support under the job configuration. You can configure email and webhook (Slack/Teams/PagerDuty) notifications for job start, success, failure, and duration warnings."
+},
+{
+  domain: "Production Pipelines",
+  q: "What is a key advantage of using Delta Live Tables (DLT) over manually orchestrated Spark notebooks for production pipelines?",
+  opts: ["DLT pipelines always run faster than equivalent Spark notebook code", "DLT handles pipeline orchestration, error recovery, data quality enforcement, and lineage tracking automatically, reducing operational overhead", "DLT supports more data sources than standard Spark", "DLT pipelines cannot be scheduled and are always triggered manually"],
+  ans: 1,
+  exp: "DLT reduces operational overhead significantly by auto-managing: dependency order, retries, cluster lifecycle, data quality rules with metrics, and lineage. Engineers declare what they want; DLT handles the how."
+},
 
-  // ── UNITY CATALOG ──
-  {
-    cat: "Unity Catalog",
-    q: "What is the correct three-level namespace structure in Unity Catalog?",
-    opts: [
-      "workspace.schema.table",
-      "catalog.database.table",
-      "catalog.schema.table",
-      "metastore.catalog.table"
-    ],
-    ans: 2,
-    exp: "Unity Catalog uses a three-level hierarchy: catalog.schema.table (e.g., main.sales.orders). This enables fine-grained governance across multiple workspaces sharing a single metastore."
-  },
-  {
-    cat: "Unity Catalog",
-    q: "Which Unity Catalog privilege allows a user to read data from a table but not create new tables in a schema?",
-    opts: ["USE SCHEMA + CREATE TABLE", "SELECT", "MODIFY", "ALL PRIVILEGES"],
-    ans: 1,
-    exp: "SELECT grants read access to table data. To also query the table, the user also needs USE CATALOG and USE SCHEMA. CREATE TABLE would allow creating new tables, which exceeds read-only access."
-  },
-  {
-    cat: "Unity Catalog",
-    q: "A data engineer wants to enforce row-level security so that sales reps see only their region's data. Which Unity Catalog feature supports this?",
-    opts: ["Column Masks", "Row Filters", "Dynamic Views", "Table Properties"],
-    ans: 1,
-    exp: "Unity Catalog Row Filters allow you to define SQL functions that are automatically applied as predicates when a table is queried, restricting rows based on the querying user's identity or group."
-  },
-  {
-    cat: "Unity Catalog",
-    q: "What is a metastore in Unity Catalog?",
-    opts: [
-      "A database that stores query results",
-      "The top-level container that holds catalogs, schemas, and tables and is typically one per region/cloud account",
-      "A cluster configuration for running SQL queries",
-      "A table format for organizing Delta files"
-    ],
-    ans: 1,
-    exp: "A Unity Catalog metastore is the top-level governance container. It stores metadata, access policies, and audit logs. Best practice is one metastore per cloud region/account, shared across workspaces."
-  },
+// ─── DOMAIN 5: Data Governance ────────────────────────────────────────────
+{
+  domain: "Data Governance",
+  q: "A data engineer needs to grant SELECT on a Unity Catalog table to the 'analysts' group. What is the minimum set of privileges required?",
+  opts: ["SELECT on the table only", "USE CATALOG, USE SCHEMA, and SELECT on the table", "ALL PRIVILEGES on the catalog", "DATA_ACCESS on the external location plus SELECT on the table"],
+  ans: 1,
+  exp: "In Unity Catalog, privilege inheritance requires: USE CATALOG (to access the catalog), USE SCHEMA (to access the schema), and SELECT (to read the table). Missing any one of these will result in a permission denied error."
+},
+{
+  domain: "Data Governance",
+  q: "Which Unity Catalog object securely stores the credentials needed to access external cloud storage (e.g., S3 bucket, ADLS container)?",
+  opts: ["External Table", "Storage Credential", "External Location", "Metastore Admin Role"],
+  ans: 1,
+  exp: "A Storage Credential in Unity Catalog securely stores cloud IAM credentials (AWS IAM role ARN, Azure Service Principal, GCP service account). It's referenced by External Locations to define accessible cloud storage paths."
+},
+{
+  domain: "Data Governance",
+  q: "A data governance team wants to automatically mask credit card numbers for all non-privileged users in Unity Catalog. Which feature provides this?",
+  opts: ["Row Filters", "Column Masks", "Dynamic Views", "Table Tags"],
+  ans: 1,
+  exp: "Column Masks attach a SQL function to a column. When queried, the function is evaluated per-user. Privileged users see actual values; others see masked output (e.g., 'XXXX-XXXX-XXXX-1234'). This is enforced at the engine level without duplicating tables."
+},
+{
+  domain: "Data Governance",
+  q: "What does Unity Catalog's automatic data lineage capture?",
+  opts: ["Only table-to-table lineage within a single notebook", "Column-level lineage showing how data flows from source tables through transformations to target tables across notebooks, jobs, and DLT pipelines", "Only lineage within a single workspace", "Lineage is only captured for Delta tables, not views"],
+  ans: 1,
+  exp: "Unity Catalog automatically captures fine-grained lineage at the column level across notebooks, jobs, SQL queries, and DLT pipelines — even across workspaces sharing the same metastore. This enables impact analysis and audit trails."
+},
+{
+  domain: "Data Governance",
+  q: "A company needs to comply with GDPR's right-to-erasure. A customer requests deletion of their data from a Delta table. Which approach is correct?",
+  opts: ["DROP TABLE and recreate from source excluding that customer", "DELETE FROM delta_table WHERE customer_id = 'X123' followed by VACUUM after the retention period", "Set the retention period to 0 days using VACUUM RETAIN 0 HOURS immediately", "Archive the customer data to cold storage and remove the reference"],
+  ans: 1,
+  exp: "DELETE FROM performs a logical delete recorded in the Delta transaction log. The data is removed from current reads immediately. VACUUM after the retention period physically removes the old data files, completing the erasure. Skipping VACUUM means old versions still contain the data."
+},
+{
+  domain: "Data Governance",
+  q: "A Unity Catalog Row Filter is applied to the 'sales' table restricting rows to the current user's region. What happens when a user queries a view built on top of 'sales'?",
+  opts: ["The view bypasses the row filter and returns all rows", "The row filter is still applied through the view, enforcing the restriction at the table level", "The view owner's permissions determine which rows are visible", "Row filters only apply to direct table queries, not views"],
+  ans: 1,
+  exp: "Unity Catalog Row Filters are enforced at the table level, transparently applied for all access paths including views, joins, and DLT pipelines. Even if the view owner has full access, the querying user's row filter is still applied."
+},
+{
+  domain: "Data Governance",
+  q: "Which Unity Catalog privilege allows a user to CREATE TABLE within a schema but not read existing tables?",
+  opts: ["SELECT", "MODIFY", "CREATE TABLE", "USE SCHEMA"],
+  ans: 2,
+  exp: "CREATE TABLE grants the ability to create new tables within a schema. It does not grant SELECT (read) or MODIFY (insert/update/delete) on existing tables. These are separate, fine-grained privileges."
+},
 
-  // ── SPARK FUNDAMENTALS ──
-  {
-    cat: "Spark Fundamentals",
-    q: "What is the difference between a narrow transformation and a wide transformation in Spark?",
-    opts: [
-      "Narrow transformations involve sorting; wide transformations do not",
-      "Narrow transformations require a shuffle (data movement); wide transformations do not",
-      "Narrow transformations compute on data within a single partition with no shuffle; wide transformations require data shuffling across partitions",
-      "Wide transformations read from multiple DataFrames; narrow transformations read from one"
-    ],
-    ans: 2,
-    exp: "Narrow transformations (map, filter, select) process data within a partition independently. Wide transformations (groupBy, join, sort) require shuffling data across partitions — this is expensive and marks a stage boundary."
-  },
-  {
-    cat: "Spark Fundamentals",
-    q: "A Spark job has a skewed partition where one task takes 10x longer than others. What is the BEST approach to fix this?",
-    opts: [
-      "Increase driver memory",
-      "Use salting or enable Adaptive Query Execution (AQE) with skew join optimization",
-      "Reduce the number of executors",
-      "Use collect() to bring all data to the driver"
-    ],
-    ans: 1,
-    exp: "Skew can be addressed by salting the skewed key or enabling AQE (spark.sql.adaptive.enabled=true), which automatically splits skewed partitions. Collect() is dangerous for large datasets."
-  },
-  {
-    cat: "Spark Fundamentals",
-    q: "What is the effect of calling cache() on a DataFrame in Spark?",
-    opts: [
-      "Immediately computes and stores the DataFrame in memory",
-      "Marks the DataFrame to be stored in memory/disk on its first action, avoiding recomputation",
-      "Writes the DataFrame to DBFS as a Delta table",
-      "Broadcasts the DataFrame to all executor nodes"
-    ],
-    ans: 1,
-    exp: "cache() is lazy — it marks the DataFrame for caching. The data is actually stored on the first action (e.g., count(), show()). Subsequent actions reuse the cached data."
-  },
-  {
-    cat: "Spark Fundamentals",
-    q: "Which join strategy should be used when one DataFrame is small enough to fit in memory and you want to avoid a shuffle?",
-    opts: ["Sort-Merge Join", "Broadcast Hash Join", "Shuffle Hash Join", "Cross Join"],
-    ans: 1,
-    exp: "Broadcast Hash Join broadcasts the smaller DataFrame to all executors, eliminating the shuffle. It's triggered automatically when the smaller side is below spark.sql.autoBroadcastJoinThreshold (default 10MB)."
-  },
-  {
-    cat: "Spark Fundamentals",
-    q: "What does Adaptive Query Execution (AQE) do when spark.sql.adaptive.enabled is true?",
-    opts: [
-      "Pre-compiles all SQL to native code before execution",
-      "Re-optimizes query plans at runtime based on actual statistics from completed stages",
-      "Automatically partitions data based on column cardinality",
-      "Enables vectorized query execution on CPU"
-    ],
-    ans: 1,
-    exp: "AQE collects runtime statistics from completed shuffle stages and uses them to re-optimize subsequent stages, enabling dynamic partition coalescing, skew join handling, and switching join strategies."
-  },
-
-  // ── DATABRICKS WORKFLOWS ──
-  {
-    cat: "Databricks Workflows",
-    q: "A Databricks job task is configured with 'If not succeeded' set to stop the pipeline. What does this mean?",
-    opts: [
-      "If any upstream task fails, downstream tasks are skipped and the job fails",
-      "If the current task hasn't completed within the SLA, the job is stopped",
-      "The task retries indefinitely until it succeeds",
-      "The task runs only on weekends"
-    ],
-    ans: 0,
-    exp: "Task dependencies in Databricks Workflows control execution flow. 'If not succeeded' means downstream tasks only run if the parent completed successfully; otherwise, they are skipped and the job is marked failed."
-  },
-  {
-    cat: "Databricks Workflows",
-    q: "What is a key benefit of using Databricks Asset Bundles (DABs) for deploying workflows?",
-    opts: [
-      "Automatically tunes cluster sizes based on historical job runs",
-      "Enables version-controlled, templated deployment of notebooks, jobs, and pipelines as code",
-      "Provides a graphical drag-and-drop interface for building pipelines",
-      "Automatically migrates Hive metastore tables to Unity Catalog"
-    ],
-    ans: 1,
-    exp: "DABs allow you to define Databricks resources (jobs, DLT pipelines, model serving endpoints) in YAML/JSON configuration files, enabling CI/CD workflows, environment promotion, and version control via Git."
-  },
-  {
-    cat: "Databricks Workflows",
-    q: "Which task type in a Databricks Job is MOST appropriate for running a Delta Live Tables pipeline?",
-    opts: ["Notebook task", "Python script task", "Delta Live Tables pipeline task", "SQL task"],
-    ans: 2,
-    exp: "Databricks Workflows has a native Delta Live Tables task type that triggers a DLT pipeline run with proper dependency tracking, monitoring, and lifecycle management."
-  },
-
-  // ── DELTA LIVE TABLES ──
-  {
-    cat: "Delta Live Tables",
-    q: "What is the difference between a STREAMING TABLE and a MATERIALIZED VIEW in Delta Live Tables?",
-    opts: [
-      "Streaming tables are computed on each pipeline run from scratch; materialized views process only new data",
-      "Streaming tables process only new data incrementally; materialized views are fully recomputed each run",
-      "Both are identical in behavior but streaming tables use Kafka as the source",
-      "Materialized views support APPLY CHANGES; streaming tables do not"
-    ],
-    ans: 1,
-    exp: "STREAMING TABLE processes only new/unprocessed records and is ideal for append-only sources. MATERIALIZED VIEW is fully recomputed each pipeline run, similar to a cached view, and handles non-append sources well."
-  },
-  {
-    cat: "Delta Live Tables",
-    q: "A DLT pipeline uses APPLY CHANGES INTO. What problem does this solve?",
-    opts: [
-      "Compacting small files in the target Delta table",
-      "Processing CDC (Change Data Capture) events to apply inserts, updates, and deletes to a target table",
-      "Automatically broadcasting small lookup tables across the cluster",
-      "Enforcing row-level security on the target table"
-    ],
-    ans: 1,
-    exp: "APPLY CHANGES INTO handles CDC data by interpreting insert/update/delete events from a source and applying them to a target Delta table, maintaining the current state correctly."
-  },
-  {
-    cat: "Delta Live Tables",
-    q: "Which DLT decorator defines data quality constraints and can be configured to warn, drop, or fail on violations?",
-    opts: ["@dlt.table", "@dlt.view", "@dlt.expect / @dlt.expect_or_drop / @dlt.expect_or_fail", "@dlt.constraint"],
-    ans: 2,
-    exp: "DLT expectations use @dlt.expect (warn), @dlt.expect_or_drop (remove violating rows), or @dlt.expect_or_fail (halt the pipeline) to enforce data quality rules declaratively."
-  },
-
-  // ── DATA GOVERNANCE ──
-  {
-    cat: "Data Governance",
-    q: "A data engineer needs to mask the SSN column so non-privileged users see 'XXX-XX-XXXX'. Which Unity Catalog feature is most appropriate?",
-    opts: ["Row Filters", "Column Masks", "Dynamic Views", "Table ACLs"],
-    ans: 1,
-    exp: "Column Masks in Unity Catalog allow you to attach a masking function to a column. When queried, the function is applied automatically based on the user's identity, returning masked values to unauthorized users."
-  },
-  {
-    cat: "Data Governance",
-    q: "What is data lineage in the context of Unity Catalog?",
-    opts: [
-      "The process of archiving old data to cheaper storage",
-      "The ability to track the origin, transformations, and movement of data across tables, notebooks, and workflows",
-      "A compliance framework for GDPR data deletion requests",
-      "The schema history of a Delta table over time"
-    ],
-    ans: 1,
-    exp: "Unity Catalog automatically captures lineage by tracking how data flows between tables, notebooks, jobs, and DLT pipelines. This enables impact analysis, audit, and compliance workflows."
-  },
-
-  // ── PERFORMANCE & OPTIMIZATION ──
-  {
-    cat: "Performance",
-    q: "A Delta table receives thousands of small file writes. After running OPTIMIZE, what is the recommended next step to reclaim storage?",
-    opts: ["ANALYZE TABLE", "VACUUM", "REFRESH TABLE", "DESCRIBE DETAIL"],
-    ans: 1,
-    exp: "OPTIMIZE creates new compacted files but leaves the old small files in place (marked for deletion in the transaction log). VACUUM physically removes files no longer referenced and older than the retention threshold."
-  },
-  {
-    cat: "Performance",
-    q: "Which Spark configuration enables dynamic partition coalescing to reduce shuffle overhead?",
-    opts: [
-      "spark.sql.shuffle.partitions = 200",
-      "spark.sql.adaptive.enabled = true",
-      "spark.default.parallelism = 8",
-      "spark.executor.memory = 8g"
-    ],
-    ans: 1,
-    exp: "Adaptive Query Execution (spark.sql.adaptive.enabled=true) includes dynamic coalescing of shuffle partitions based on actual data sizes, reducing the overhead of too many small partitions."
-  },
-  {
-    cat: "Performance",
-    q: "A query filters heavily on the 'event_date' column. How should you optimize the Delta table to maximize data skipping?",
-    opts: [
-      "Run VACUUM RETAIN 0 HOURS",
-      "Run OPTIMIZE with ZORDER BY (event_date)",
-      "Increase spark.sql.shuffle.partitions",
-      "Convert the table to CSV format"
-    ],
-    ans: 1,
-    exp: "ZORDER BY on event_date clusters data so files contain narrower date ranges. Combined with Delta's min/max statistics per file, this enables data skipping — entire files are skipped when their date range doesn't match the filter."
-  },
-  {
-    cat: "Performance",
-    q: "What is the difference between repartition() and coalesce() in Spark?",
-    opts: [
-      "repartition() only reduces partitions; coalesce() can increase or decrease partitions",
-      "repartition() can increase or decrease partitions and always shuffles data; coalesce() only reduces partitions and avoids a full shuffle",
-      "Both are identical but repartition() uses hash partitioning",
-      "coalesce() triggers an action; repartition() is a lazy transformation"
-    ],
-    ans: 1,
-    exp: "repartition() does a full shuffle and can change partition count in any direction. coalesce() merges partitions without a full shuffle (data moves from fewer executors) and is more efficient when reducing partitions."
-  },
+// ─── DELTA LAKE DEEP DIVE ─────────────────────────────────────────────────
+{
+  domain: "Incremental Data Processing",
+  q: "A Delta table has 1,000 small Parquet files due to frequent streaming micro-batch writes. After running OPTIMIZE, how many files would you expect?",
+  opts: ["Exactly 1 file", "Fewer, larger files (target size ~1GB each by default)", "The same 1,000 files — OPTIMIZE does not reduce file count", "Zero files — OPTIMIZE deletes the data"],
+  ans: 1,
+  exp: "OPTIMIZE compacts small files into larger ones targeting ~1GB per file. It writes new compacted files and marks old ones as deleted in the transaction log. The exact count depends on total data size."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "What is the default data retention period for Delta Lake time travel (before VACUUM can delete old files)?",
+  opts: ["1 day", "7 days", "30 days", "Indefinitely until explicitly vacuumed"],
+  ans: 1,
+  exp: "Delta Lake's default retention threshold is 7 days (168 hours). VACUUM will not delete files newer than this threshold by default. You can configure it with delta.deletedFileRetentionDuration table property."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A Delta table is defined with the property 'delta.enableChangeDataFeed = true'. What additional directory appears in the table storage?",
+  opts: ["_changes/", "_cdf_metadata/", "_change_data/", "_cdc_log/"],
+  ans: 2,
+  exp: "When CDF is enabled, Delta Lake writes row-level change data to the _change_data/ directory within the table path. These files record the before/after state of each changed row along with the change type (_change_type column)."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "Which of the following statements about Delta Lake schema enforcement is TRUE?",
+  opts: ["Delta Lake allows any schema to be written by default, regardless of the existing table schema", "Delta Lake rejects writes that have columns not present in the existing table schema (schema on write)", "Schema enforcement only applies to streaming writes, not batch writes", "You must drop and recreate a Delta table to change its schema"],
+  ans: 1,
+  exp: "Delta Lake enforces schema by default (schema on write). If you try to write a DataFrame with extra columns or incompatible types, the write fails. To add new columns, use mergeSchema=true or ALTER TABLE ADD COLUMN."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A data engineer runs MERGE INTO on a Delta table. Which statement describes the atomicity of this operation?",
+  opts: ["MERGE commits each matched row independently; partial commits are possible", "MERGE is an atomic operation: the entire merge either fully succeeds or fully fails with no partial updates", "MERGE can only update, not insert or delete, within a single statement", "MERGE commits only when the output file is closed, which may happen mid-merge"],
+  ans: 1,
+  exp: "MERGE INTO in Delta Lake is fully atomic — it's a single transaction. Either all matched rows are updated/deleted and all unmatched rows inserted, or the entire operation fails. No partial state is ever committed."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer executes df.explain(True). What information does this provide?",
+  opts: ["The execution time breakdown per stage", "The parsed, analyzed, optimized, and physical query plans for the DataFrame", "The number of records processed per executor", "The schema of all DataFrames in the current Spark session"],
+  ans: 1,
+  exp: "df.explain(True) (or explain(mode='extended')) displays all four query plans: Parsed Logical Plan, Analyzed Logical Plan, Optimized Logical Plan, and Physical Plan. This is essential for debugging performance issues and understanding optimization decisions."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which Spark transformation is considered a 'wide' transformation that triggers a shuffle?",
+  opts: ["filter()", "select()", "map()", "groupBy()"],
+  ans: 3,
+  exp: "groupBy() is a wide transformation because records with the same key may be on different partitions and must be shuffled to the same executor for aggregation. filter(), select(), and map() are narrow transformations that process data within each partition independently."
+},
+{
+  domain: "Production Pipelines",
+  q: "A Databricks Workflow has a task configured with 'depends_on: [task_a, task_b]'. When does this task execute?",
+  opts: ["Immediately at job start, in parallel with task_a and task_b", "Only after both task_a AND task_b have successfully completed", "After either task_a OR task_b completes, whichever is first", "After task_a completes regardless of task_b's status"],
+  ans: 1,
+  exp: "When a task lists multiple dependencies, it waits for ALL listed tasks to complete successfully before it starts. This enables DAG-structured workflows with parallel tasks converging at a downstream task."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "What does df.dropDuplicates(['customer_id', 'order_date']) do?",
+  opts: ["Removes all rows where customer_id or order_date is null", "Keeps only one row per unique combination of customer_id and order_date, dropping subsequent duplicates", "Drops the customer_id and order_date columns from the DataFrame", "Raises an error if any duplicate combinations exist"],
+  ans: 1,
+  exp: "dropDuplicates() with a list of columns deduplicates based on those specific columns. For each unique combination of the specified columns, only one row is retained. The choice of which duplicate to keep is non-deterministic unless combined with orderBy."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer needs to read a Delta table that was valid as of version 50. Which query is correct?",
+  opts: ["SELECT * FROM my_table AT VERSION 50", "SELECT * FROM my_table VERSION AS OF 50", "SELECT * FROM my_table WHERE _delta_version = 50", "RESTORE TABLE my_table TO VERSION AS OF 50"],
+  ans: 1,
+  exp: "Delta Lake time travel syntax is: SELECT * FROM table_name VERSION AS OF <version_number> or TIMESTAMP AS OF <timestamp>. RESTORE TABLE changes the current table state rather than reading a historical version."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A data engineer needs to query a Delta table stored in a cloud bucket that is NOT registered in the metastore. How can they query it?",
+  opts: ["They cannot — Delta tables must be registered to be queried", "Using spark.table() with the full cloud path", "Using spark.read.format('delta').load('cloud-path') or SELECT * FROM delta.`cloud-path`", "By first running CREATE TABLE USING DELTA LOCATION"],
+  ans: 2,
+  exp: "Delta tables can be queried directly by path without metastore registration: spark.read.format('delta').load('s3://bucket/path') or the SQL syntax SELECT * FROM delta.`s3://bucket/path`. This is useful for ad-hoc queries on unregistered tables."
+},
+{
+  domain: "Data Governance",
+  q: "A Unity Catalog External Location is configured for 's3://my-data-bucket/'. What does this enable?",
+  opts: ["Automatic ingestion of all files in that bucket into Delta tables", "Controlled access to read and write files in that cloud storage path using credentials stored in a Storage Credential", "Public read access to all files under that path for all workspace users", "Automatic schema inference for all Parquet files in the bucket"],
+  ans: 1,
+  exp: "An External Location in Unity Catalog maps a cloud storage URL to a Storage Credential, defining the path and the credentials needed to access it. Users granted access to the External Location can create External Tables or read/write files within it, subject to their privileges."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "A DLT pipeline defines the following:\n\n@dlt.table\ndef silver_orders():\n    return dlt.read_stream('bronze_orders').filter('status != \"CANCELLED\"')\n\nWhat type of table is silver_orders?",
+  code: '@dlt.table\ndef silver_orders():\n    return dlt.read_stream("bronze_orders")\n           .filter(\'status != "CANCELLED"\')',
+  opts: ["A Materialized View that is fully recomputed each run", "A Streaming Table that processes only new records from bronze_orders", "A temporary view that is not persisted to storage", "A regular Delta table with no DLT orchestration"],
+  ans: 1,
+  exp: "When you use dlt.read_stream() inside a @dlt.table function, DLT creates a STREAMING TABLE. It processes only new records from the source incrementally. Using dlt.read() instead would create a MATERIALIZED VIEW."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer runs the following and gets a large number of tasks. Why?\n\nspark.conf.set('spark.sql.shuffle.partitions', 2000)\ndf.groupBy('country').count().show()",
+  code: "spark.conf.set('spark.sql.shuffle.partitions', 2000)\ndf.groupBy('country').count().show()",
+  opts: ["groupBy always creates 2000 tasks regardless of configuration", "Setting shuffle partitions to 2000 makes the groupBy output 2000 partitions (even if there are far fewer countries), leading to many empty/small tasks", "The show() action forces full materialization with 2000 tasks", "2000 is the minimum allowed value for shuffle partitions"],
+  ans: 1,
+  exp: "spark.sql.shuffle.partitions controls how many partitions are created after shuffles. Setting it to 2000 when the data (e.g., only 50 countries) doesn't need that many leads to thousands of empty or tiny partitions, wasting resources. Use AQE (adaptive.enabled=true) to auto-tune this."
+},
+{
+  domain: "Production Pipelines",
+  q: "What is the recommended approach for passing secrets (database passwords, API keys) to Databricks notebooks and jobs?",
+  opts: ["Hardcode them in the notebook and restrict notebook access", "Store them in a Delta table with column-level encryption", "Use Databricks Secrets (backed by Databricks Secret Store or Azure Key Vault) and access via dbutils.secrets.get()", "Store them in a JSON config file in DBFS with restricted permissions"],
+  ans: 2,
+  exp: "Databricks Secrets provides a secure vault for sensitive credentials. Secrets are referenced in code with dbutils.secrets.get(scope, key) and are never displayed in notebook output (they appear as [REDACTED]). This avoids hardcoding credentials in code."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer notices a Spark job is slow and sees that one task takes 50x longer than the others in the Spark UI. What is the most likely cause?",
+  opts: ["The cluster has insufficient RAM", "Data skew: one key has a disproportionately large number of records concentrated in one partition", "The driver is a bottleneck", "The DataFrame has too many columns"],
+  ans: 1,
+  exp: "This is a classic data skew symptom — one partition/task has far more data than others. The long-running task processes the skewed key. Solutions include salting the skewed key, using AQE skew join optimization (spark.sql.adaptive.skewJoin.enabled=true), or filtering the skewed key into a separate join."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "Which table type in Unity Catalog stores data files in Databricks-managed storage and is fully managed by Databricks?",
+  opts: ["External Table", "Managed Table", "View", "Foreign Table"],
+  ans: 1,
+  exp: "Managed Tables store data in the metastore's default storage location (managed by Databricks/Unity Catalog). When you DROP a managed table, both the metadata AND the data files are deleted. External Tables only delete metadata on DROP."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A data engineer drops an External Table in Unity Catalog. What happens to the underlying data files?",
+  opts: ["Both the metadata and data files are deleted", "Only the metadata (table definition) is removed; the data files in cloud storage remain intact", "The files are moved to a recycle bin for 30 days", "The operation fails because External Tables cannot be dropped"],
+  ans: 1,
+  exp: "Dropping an External Table removes only the table definition from the metastore. The underlying data files in cloud storage are NOT deleted — they remain at the external location. This is the key difference from Managed Tables."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which Spark API is generally preferred over RDDs for structured data processing due to optimizer integration?",
+  opts: ["RDD API with mapPartitions()", "DataFrame/Dataset API using Catalyst optimizer", "Accumulators with manual aggregation", "DStream API for batch processing"],
+  ans: 1,
+  exp: "The DataFrame/Dataset API uses the Catalyst query optimizer and Tungsten execution engine, providing automatic query plan optimization, predicate pushdown, and efficient memory management. RDDs bypass these optimizations and require manual tuning."
+},
+{
+  domain: "Data Governance",
+  q: "A table tag is added to a Delta table in Unity Catalog: ALTER TABLE sales SET TAGS ('pii' = 'true'). What is the primary use of table tags?",
+  opts: ["Tags automatically encrypt PII columns", "Tags add searchable metadata to tables for classification, discovery, and governance workflows without affecting query behavior", "Tags restrict SELECT access to users with matching tag attributes", "Tags trigger automatic VACUUM when the PII tag is set"],
+  ans: 1,
+  exp: "Tags (on tables, columns, schemas, catalogs) are metadata labels used for data classification and discovery. They appear in the Unity Catalog UI and APIs, helping with governance workflows like identifying PII data. They don't automatically enforce security or behavior."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "A data engineer uses stream-stream joins in Structured Streaming. What is required to ensure the engine can properly handle late data and clear state?",
+  opts: ["Both streams must have the same number of partitions", "Watermarks must be defined on both streams to bound the join state", "The join must use a broadcast join strategy", "Stream-stream joins always require checkpoint location set to MEMORY"],
+  ans: 1,
+  exp: "Stream-stream joins maintain state for both sides waiting for the matching event. Without watermarks, this state grows indefinitely. Defining watermarks on both streams bounds the state: records older than the watermark are dropped and state is cleaned up."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "A data engineer needs to compute a 7-day rolling average of daily sales per product. Which Spark feature is most appropriate?",
+  opts: ["groupBy('product').agg(avg('sales'))", "Window functions with rowsBetween(-6, 0) over a window ordered by date partitioned by product", "A self-join of the sales table on date range", "A UDF that reads the last 7 rows per product"],
+  ans: 1,
+  exp: "Window functions with rowsBetween(-6, 0) define a frame of the current row plus 6 preceding rows (7 total). Combined with partitionBy('product').orderBy('date'), this computes a 7-day rolling average without data movement or self-joins."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "A data engineer configures init scripts on a Databricks cluster. When do init scripts execute?",
+  opts: ["Before each Spark job runs", "Once when the cluster starts up, before Spark is initialized on each node", "After notebooks are attached to the cluster", "When a new user connects to the cluster"],
+  ans: 1,
+  exp: "Init scripts run during cluster initialization on each node, before Spark is started. They're typically used to install OS packages, configure system settings, or install Python libraries that can't be added via cluster libraries UI."
+},
+{
+  domain: "Production Pipelines",
+  q: "A data engineer wants to run Task B only if Task A failed (for alerting/cleanup purposes). How is this configured in Databricks Workflows?",
+  opts: ["This is not possible — tasks only run if their dependencies succeed", "By setting Task B's 'Run if' condition to 'If not succeeded' on Task A", "By adding Task B as a 'failure handler' in the job configuration", "By using a try/catch block in Task A's notebook"],
+  ans: 1,
+  exp: "Databricks Workflows supports conditional task execution via 'Run if' conditions: 'If succeeded', 'If failed', 'If not succeeded' (failed or skipped), or 'All done'. This enables cleanup, alerting, or compensation tasks to run conditionally based on upstream outcomes."
+},
+{
+  domain: "ELT with Spark & Python",
+  q: "Which approach is MOST efficient when a small lookup table (100 MB) needs to be joined with a large fact table (500 GB)?",
+  opts: ["Sort-merge join with explicit repartition on the join key", "Broadcast join using broadcast(lookup_df) to avoid shuffling the large table", "Cross join with a filter condition", "Writing the lookup to Delta and reading with spark.read()"],
+  ans: 1,
+  exp: "When one side is small enough to fit in memory (< spark.sql.autoBroadcastJoinThreshold, default 10MB, but can be increased), a broadcast join is optimal. The small table is sent to all executors, avoiding the expensive shuffle of the 500GB table entirely."
+},
+{
+  domain: "Lakehouse Platform",
+  q: "What is the role of the Hive metastore in Databricks workspaces that have NOT migrated to Unity Catalog?",
+  opts: ["It stores the actual data files for managed tables", "It stores table metadata (schema, location, properties) for tables registered in the 'default' and user-created databases", "It enforces column-level security and row filters", "It is deprecated and disabled in all Databricks workspaces"],
+  ans: 1,
+  exp: "The legacy Hive metastore (workspace-level) stores table definitions, schemas, and locations for all registered tables. It's a per-workspace catalog without cross-workspace sharing or fine-grained governance — limitations addressed by Unity Catalog."
+},
+{
+  domain: "Incremental Data Processing",
+  q: "A streaming job processes Kafka messages and uses foreachBatch to write to a Delta table. The engineer wants to ensure idempotent writes even if a batch is retried. Which mechanism helps achieve this?",
+  opts: ["Using append mode with ignoreDuplicates=True", "Using the batchId provided in foreachBatch as a condition to detect and skip already-committed batches", "Setting spark.streaming.kafka.exactly.once=True", "Writing to a temporary table first and then merging"],
+  ans: 1,
+  exp: "The batchId in foreachBatch is unique and monotonically increasing. By recording committed batchIds (e.g., in a Delta table) and checking before writing, you can detect retried batches and skip them, achieving idempotent (exactly-once) semantics."
+},
+{
+  domain: "Data Governance",
+  q: "Which of the following is TRUE about Unity Catalog's three-level namespace?",
+  opts: ["The three levels are: workspace.database.table", "The three levels are catalog.schema.table, and each level must be explicitly specified in queries unless a default is set", "Unity Catalog only supports two levels for performance reasons", "The metastore is the first level of the namespace"],
+  ans: 1,
+  exp: "Unity Catalog's namespace is catalog.schema.table (e.g., main.sales.orders). You can set defaults with USE CATALOG and USE SCHEMA. The metastore is above the catalog level and not part of the query namespace."
+}
 ];
 
-// State
-let state = {
-  questions: [],
-  current: 0,
-  answered: 0,
-  correct: 0,
-  selectedCat: 'All',
-  answered_flags: [],
-  done: false
-};
+// ════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════
+let questions = [];
+let currentQ = 0;
+let answers = [];   // null = unanswered, 0-3 = choice index, -1 = skipped
+let flags = [];
+let timerInterval = null;
+let secondsLeft = 120 * 60;
+let examSubmitted = false;
 
-const categories = ['All', ...new Set(QUESTIONS.map(q => q.cat))];
+function startExam() {
+  questions = shuffle([...ALL_QUESTIONS]);
+  answers = new Array(questions.length).fill(null);
+  flags = new Array(questions.length).fill(false);
+  currentQ = 0;
+  examSubmitted = false;
+  secondsLeft = 120 * 60;
+
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('exam').style.display = 'block';
+
+  buildNavGrid();
+  renderQuestion();
+  startTimer();
+}
 
 function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
+  for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  return a;
+  return arr;
 }
 
-function initQuestions() {
-  const filtered = state.selectedCat === 'All' ? QUESTIONS : QUESTIONS.filter(q => q.cat === state.selectedCat);
-  state.questions = shuffle(filtered);
-  state.current = 0;
-  state.answered = 0;
-  state.correct = 0;
-  state.answered_flags = state.questions.map(() => null);
-  state.done = false;
-  updateStats();
-  renderCategories();
-  renderQuestion();
-  document.getElementById('score-screen').classList.remove('show');
-  document.getElementById('question-card').style.display = '';
+// ── TIMER ──
+function startTimer() {
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    secondsLeft--;
+    updateTimerDisplay();
+    if (secondsLeft <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('timeup-modal').classList.add('open');
+    }
+  }, 1000);
 }
 
-function updateStats() {
-  document.getElementById('stat-correct').textContent = state.correct;
-  document.getElementById('stat-total').textContent = state.answered;
-  const remaining = state.questions.length - state.current;
-  document.getElementById('stat-remaining').textContent = state.done ? '✓' : remaining;
-  const pct = state.questions.length > 0 ? (state.current / state.questions.length) * 100 : 0;
+function updateTimerDisplay() {
+  const m = Math.floor(secondsLeft / 60);
+  const s = secondsLeft % 60;
+  const str = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const el = document.getElementById('timer');
+  el.textContent = str;
+  el.className = 'timer-val' + (secondsLeft <= 300 ? ' danger' : secondsLeft <= 600 ? ' warn' : '');
+}
+
+// ── NAV GRID ──
+function buildNavGrid() {
+  const grid = document.getElementById('q-nav-grid');
+  grid.innerHTML = '';
+  questions.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-nav-btn';
+    btn.textContent = i + 1;
+    btn.onclick = () => goTo(i);
+    btn.id = `nav-btn-${i}`;
+    grid.appendChild(btn);
+  });
+  updateNavGrid();
+}
+
+function updateNavGrid() {
+  questions.forEach((_, i) => {
+    const btn = document.getElementById(`nav-btn-${i}`);
+    if (!btn) return;
+    btn.className = 'q-nav-btn' +
+      (i === currentQ ? ' current' :
+       flags[i] ? ' flagged' :
+       answers[i] !== null ? ' answered' : '');
+  });
+
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('hdr-answered').textContent = answered;
+  document.getElementById('hdr-qnum').textContent = `${currentQ + 1}/${questions.length}`;
+
+  const pct = ((currentQ + 1) / questions.length) * 100;
   document.getElementById('progress-fill').style.width = pct + '%';
 }
 
-function renderCategories() {
-  const el = document.getElementById('categories');
-  el.innerHTML = categories.map(c =>
-    `<button class="cat-pill ${c === state.selectedCat ? 'active' : ''}" onclick="selectCat('${c}')">${c}</button>`
-  ).join('');
-}
-
-function selectCat(cat) {
-  state.selectedCat = cat;
-  initQuestions();
-}
-
+// ── RENDER QUESTION ──
 function renderQuestion() {
-  const card = document.getElementById('question-card');
-  if (state.current >= state.questions.length) {
-    showScore();
-    return;
-  }
-  const q = state.questions[state.current];
-  const letters = ['A', 'B', 'C', 'D'];
-  const hasCode = q.code;
+  const q = questions[currentQ];
 
-  card.innerHTML = `
-    <div class="question-card">
-      <div class="question-header">
-        <div class="q-number">Q${state.current + 1}/${state.questions.length}</div>
-        <div class="q-meta">
-          <div class="q-category">${q.cat}</div>
-          <div class="q-text">${q.q}${q.code ? `<div class="q-code">${q.code}</div>` : ''}</div>
-        </div>
+  document.getElementById('q-domain-tag').textContent = q.domain;
+  document.getElementById('q-num-label').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+  document.getElementById('q-text').textContent = q.q;
+
+  const codeEl = document.getElementById('q-code');
+  if (q.code) {
+    codeEl.style.display = 'block';
+    codeEl.innerHTML = syntaxHighlight(q.code);
+  } else {
+    codeEl.style.display = 'none';
+  }
+
+  // Flag button
+  const flagBtn = document.getElementById('flag-btn');
+  flagBtn.className = 'flag-btn' + (flags[currentQ] ? ' flagged' : '');
+  flagBtn.textContent = flags[currentQ] ? '⚑ Flagged' : '⚑ Flag for review';
+
+  // Options
+  const optsEl = document.getElementById('q-options');
+  const letters = ['A','B','C','D'];
+  const isAnswered = answers[currentQ] !== null;
+  const userAns = answers[currentQ];
+
+  optsEl.innerHTML = q.opts.map((opt, i) => {
+    let cls = 'option-row';
+    if (isAnswered) {
+      cls += ' locked';
+      if (i === q.ans) cls += ' correct';
+      else if (i === userAns) cls += ' incorrect';
+    } else {
+      // nothing extra
+    }
+    const icon = isAnswered ? (i === q.ans ? '<span class="opt-indicator">✓</span>' : (i === userAns ? '<span class="opt-indicator">✗</span>' : '')) : '';
+    return `<div class="${cls}" onclick="selectAnswer(${i})">
+      <div class="opt-key">${letters[i]}</div>
+      <div class="opt-body">${opt}</div>
+      ${icon}
+    </div>`;
+  }).join('');
+
+  // Explanation
+  const expEl = document.getElementById('q-explanation');
+  if (isAnswered) {
+    const correct = userAns === q.ans;
+    expEl.className = 'explanation-box ' + (correct ? 'show' : 'show-wrong');
+    expEl.innerHTML = `<div class="exp-title">${correct ? '✓ Correct' : '✗ Incorrect — Explanation'}</div>${q.exp}`;
+  } else {
+    expEl.className = 'explanation-box';
+    expEl.textContent = '';
+  }
+
+  // Status
+  const statusEl = document.getElementById('answered-status');
+  const answeredCount = answers.filter(a => a !== null).length;
+  statusEl.innerHTML = `<strong>${answeredCount}</strong> of ${questions.length} answered`;
+
+  // Prev/Next
+  document.getElementById('btn-prev').disabled = currentQ === 0;
+  document.getElementById('btn-next').textContent = currentQ === questions.length - 1 ? 'Finish →' : 'Next →';
+
+  updateNavGrid();
+}
+
+function syntaxHighlight(code) {
+  return code
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/(#.*)/g, '<span class="cm">$1</span>')
+    .replace(/\b(def|return|import|from|for|in|if|else|True|False|None|class|with|as|and|or|not)\b/g, '<span class="kw">$1</span>')
+    .replace(/\b(SELECT|FROM|WHERE|GROUP|BY|ORDER|HAVING|JOIN|ON|AS|INTO|SET|UPDATE|DELETE|INSERT|CREATE|TABLE|VIEW|WITH|DISTINCT|LIMIT|AND|OR|NOT|IS|NULL|IN|LIKE|CASE|WHEN|THEN|END|MERGE|MATCHED|USING)\b/gi, '<span class="kw">$1</span>')
+    .replace(/'([^']*)'/g, '<span class="str">\'$1\'</span>')
+    .replace(/"([^"]*)"/g, '<span class="str">"$1"</span>')
+    .replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+}
+
+function selectAnswer(idx) {
+  if (answers[currentQ] !== null) return;
+  answers[currentQ] = idx;
+  renderQuestion();
+}
+
+function goTo(idx) {
+  if (idx < 0 || idx >= questions.length) return;
+  currentQ = idx;
+  renderQuestion();
+}
+
+function toggleFlag() {
+  flags[currentQ] = !flags[currentQ];
+  renderQuestion();
+}
+
+// ── SUBMIT ──
+function openSubmitModal() {
+  const unanswered = answers.filter(a => a === null).length;
+  document.getElementById('unanswered-count').textContent = unanswered;
+  document.getElementById('submit-modal-msg').innerHTML =
+    unanswered > 0
+      ? `You have <strong>${unanswered} unanswered question${unanswered !== 1 ? 's' : ''}</strong>. Unanswered questions will be marked incorrect. Submit now?`
+      : `All ${questions.length} questions are answered. Submit your exam?`;
+  document.getElementById('submit-modal').classList.add('open');
+}
+
+function closeSubmitModal() {
+  document.getElementById('submit-modal').classList.remove('open');
+}
+
+function submitExam() {
+  clearInterval(timerInterval);
+  document.getElementById('submit-modal').classList.remove('open');
+  document.getElementById('timeup-modal').classList.remove('open');
+  examSubmitted = true;
+  showResults();
+}
+
+// ════════════════════════════════════════
+//  RESULTS
+// ════════════════════════════════════════
+function showResults() {
+  document.getElementById('exam').style.display = 'none';
+  const resultsEl = document.getElementById('results');
+  resultsEl.style.display = 'block';
+
+  const total = questions.length;
+  const correct = answers.filter((a, i) => a !== null && a === questions[i].ans).length;
+  const wrong = answers.filter((a, i) => a !== null && a !== questions[i].ans).length;
+  const skipped = answers.filter(a => a === null).length;
+  const pct = Math.round((correct / total) * 100);
+  const passed = pct >= 70;
+
+  // Time used
+  const elapsed = 120 * 60 - secondsLeft;
+  const em = Math.floor(elapsed / 60), es = elapsed % 60;
+
+  // Domain analysis
+  const domains = [...new Set(questions.map(q => q.domain))];
+  const domainStats = domains.map(d => {
+    const dqs = questions.map((q, i) => ({ q, i })).filter(x => x.q.domain === d);
+    const dCorrect = dqs.filter(x => answers[x.i] === x.q.ans).length;
+    const dTotal = dqs.length;
+    const dPct = Math.round((dCorrect / dTotal) * 100);
+    return { domain: d, correct: dCorrect, total: dTotal, pct: dPct };
+  }).sort((a, b) => a.pct - b.pct);
+
+  const weakDomains = domainStats.filter(d => d.pct < 70);
+
+  // Study recommendations
+  const recommendations = {
+    "Lakehouse Platform": "Review Delta Lake architecture, cluster types, Photon engine, DBFS, and Databricks Runtime features.",
+    "ELT with Spark & Python": "Practice DataFrame transformations, join strategies, window functions, UDFs, and query plan analysis.",
+    "Incremental Data Processing": "Study Auto Loader, Structured Streaming triggers/output modes/checkpointing, DLT, and Delta CDF.",
+    "Production Pipelines": "Understand Databricks Jobs, task dependencies, DABs, retry policies, and secret management.",
+    "Data Governance": "Review Unity Catalog hierarchy, privilege model, column masks, row filters, lineage, and external locations."
+  };
+
+  resultsEl.innerHTML = `
+    <div class="results-header">
+      <div class="result-status-badge ${passed ? 'badge-pass' : 'badge-fail'}">${passed ? '✓ PASS' : '✗ FAIL'}</div>
+      <div class="result-score-big" style="color:${passed ? '#6fcf97' : '#e57373'}">${pct}%</div>
+      <div class="result-score-sub">Pass threshold: <strong>70%</strong> &nbsp;|&nbsp; Time used: <strong>${String(em).padStart(2,'0')}:${String(es).padStart(2,'0')}</strong></div>
+      <div class="score-cards">
+        <div class="score-card"><div class="sc-val" style="color:#6fcf97">${correct}</div><div class="sc-label">Correct</div></div>
+        <div class="score-card"><div class="sc-val" style="color:#e57373">${wrong}</div><div class="sc-label">Incorrect</div></div>
+        <div class="score-card"><div class="sc-val" style="color:#f0c060">${skipped}</div><div class="sc-label">Skipped</div></div>
+        <div class="score-card"><div class="sc-val">${total}</div><div class="sc-label">Total</div></div>
       </div>
-      <div class="options" id="options">
-        ${q.opts.map((opt, i) => `
-          <div class="option" id="opt-${i}" onclick="selectOption(${i})">
-            <div class="opt-letter">${letters[i]}</div>
-            <div class="opt-text">${opt}</div>
+    </div>
+
+    <div class="results-body">
+
+      <!-- Domain Analysis -->
+      <div class="domain-analysis">
+        <div class="section-title">Performance by Domain</div>
+        ${domainStats.map(d => {
+          const strength = d.pct >= 80 ? 'strong' : d.pct >= 60 ? 'medium' : 'weak';
+          const color = d.pct >= 80 ? '#1a7a3c' : d.pct >= 60 ? '#c47d00' : '#c0392b';
+          const label = d.pct >= 80 ? '✓ Strong' : d.pct >= 60 ? '⚠ Needs Practice' : '✗ Weak Area';
+          return `
+          <div class="domain-card">
+            <div class="domain-card-top">
+              <div class="domain-card-name">${d.domain}</div>
+              <div class="domain-card-score" style="color:${color}">${d.correct}/${d.total} &nbsp; ${d.pct}%</div>
+            </div>
+            <div class="domain-bar-track">
+              <div class="domain-bar-fill ${strength}" style="width:${d.pct}%"></div>
+            </div>
+            <div class="domain-recommendation ${d.pct < 70 ? 'needs-work' : ''}">${label}${d.pct < 70 ? ' — ' + (recommendations[d.domain] || 'Review this topic area.') : ''}</div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <!-- Weak Areas Panel -->
+      ${weakDomains.length > 0 ? `
+      <div class="weak-panel">
+        <h3>⚠ Priority Study Areas Before Your Exam</h3>
+        ${weakDomains.map((d, i) => `
+          <div class="weak-item">
+            <div class="weak-num">${i+1}</div>
+            <div class="weak-text">
+              <strong>${d.domain} (${d.pct}%)</strong>
+              ${recommendations[d.domain] || ''}
+            </div>
           </div>
         `).join('')}
       </div>
-      <div class="explanation" id="explanation">
-        <strong>Explanation:</strong> ${q.exp}
+      ` : `
+      <div style="background:#edfaf2;border:1px solid #6fcf97;border-radius:8px;padding:20px 24px;margin-bottom:40px;">
+        <strong style="color:#1a7a3c">🎉 No critical weak areas detected.</strong>
+        <span style="color:#2d5a3d;font-size:13px;margin-left:8px;">You scored above 70% in all domains. Focus on any remaining gaps before exam day.</span>
       </div>
-      <div class="actions">
-        <div>
-          <span class="result-badge" id="result-badge"></span>
-        </div>
-        <div style="display:flex; gap:10px;">
-          <button class="btn btn-ghost" onclick="skipQuestion()">Skip</button>
-          <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" disabled>Next →</button>
-        </div>
+      `}
+
+      <!-- Question Review -->
+      <div class="section-title">Question-by-Question Review</div>
+      <div class="review-list">
+        ${questions.map((q, i) => {
+          const userAns = answers[i];
+          const isCorrect = userAns === q.ans;
+          const isSkipped = userAns === null;
+          const icon = isSkipped ? '—' : isCorrect ? '✓' : '✗';
+          const iconClass = isSkipped ? 'ri-skip' : isCorrect ? 'ri-correct' : 'ri-wrong';
+          const letters = ['A','B','C','D'];
+          return `
+          <div class="review-item">
+            <div class="review-item-header" onclick="toggleReview(${i})">
+              <div class="review-icon ${iconClass}">${icon}</div>
+              <div class="review-q-text">${q.q.substring(0, 110)}${q.q.length > 110 ? '…' : ''}</div>
+              <div class="review-cat">${q.domain}</div>
+            </div>
+            <div class="review-item-body" id="review-body-${i}">
+              <div class="review-answers">
+                ${userAns !== null && userAns !== q.ans ? `<div class="review-ans-row r-wrong">✗ Your answer: ${letters[userAns]}. ${q.opts[userAns]}</div>` : ''}
+                ${userAns === null ? `<div class="review-ans-row r-wrong">— Not answered</div>` : ''}
+                <div class="review-ans-row r-correct">✓ Correct: ${letters[q.ans]}. ${q.opts[q.ans]}</div>
+              </div>
+              <div class="review-exp">${q.exp}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div class="results-actions">
+        <button class="btn btn-outline" onclick="location.reload()">← Back to Cover</button>
+        <button class="btn btn-primary" onclick="retakeExam()">Retake Exam ↺</button>
       </div>
     </div>
   `;
+
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.domain-bar-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0%';
+      setTimeout(() => { el.style.width = w; }, 50);
+    });
+  }, 100);
 }
 
-function selectOption(idx) {
-  const q = state.questions[state.current];
-  if (state.answered_flags[state.current] !== null) return; // already answered
-
-  state.answered_flags[state.current] = idx;
-  state.answered++;
-  const isCorrect = idx === q.ans;
-  if (isCorrect) state.correct++;
-
-  // Style options
-  const opts = document.querySelectorAll('.option');
-  opts.forEach((el, i) => {
-    el.classList.add('disabled');
-    if (i === q.ans) el.classList.add('correct');
-    else if (i === idx && !isCorrect) el.classList.add('wrong');
-  });
-
-  // Show explanation
-  document.getElementById('explanation').classList.add('show');
-
-  // Result badge
-  const badge = document.getElementById('result-badge');
-  badge.textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
-  badge.className = 'result-badge ' + (isCorrect ? 'correct-badge' : 'wrong-badge');
-
-  // Enable next
-  document.getElementById('next-btn').disabled = false;
-  updateStats();
+function toggleReview(i) {
+  const body = document.getElementById(`review-body-${i}`);
+  body.classList.toggle('open');
 }
 
-function nextQuestion() {
-  state.current++;
-  updateStats();
-  renderQuestion();
+function retakeExam() {
+  startExam();
 }
-
-function skipQuestion() {
-  state.answered_flags[state.current] = 'skipped';
-  state.current++;
-  updateStats();
-  renderQuestion();
-}
-
-function showScore() {
-  state.done = true;
-  document.getElementById('question-card').style.display = 'none';
-  const total = state.questions.length;
-  const pct = Math.round((state.correct / total) * 100);
-  const passed = pct >= 70;
-  const circumference = 2 * Math.PI * 60;
-  const dashOffset = circumference * (1 - pct / 100);
-  const color = pct >= 70 ? '#22c55e' : pct >= 50 ? '#ff8c42' : '#ef4444';
-  const title = pct >= 80 ? 'Outstanding!' : pct >= 70 ? 'You Passed!' : pct >= 50 ? 'Keep Studying' : 'Needs Work';
-  const subtitle = pct >= 70 ? 'Great job — you\'re on track for certification.' : 'Review the topics you missed and try again.';
-
-  document.getElementById('score-screen').innerHTML = `
-    <div class="score-ring">
-      <svg width="160" height="160" viewBox="0 0 160 160">
-        <circle cx="80" cy="80" r="60" fill="none" stroke="#1f2530" stroke-width="10"/>
-        <circle cx="80" cy="80" r="60" fill="none" stroke="${color}" stroke-width="10"
-          stroke-dasharray="${circumference}" stroke-dashoffset="${dashOffset}"
-          stroke-linecap="round" style="transition: stroke-dashoffset 1s ease"/>
-      </svg>
-      <div class="score-center">
-        <div class="score-pct">${pct}%</div>
-        <div class="score-label">Score</div>
-      </div>
-    </div>
-    <div class="score-title" style="color:${color}">${title}</div>
-    <div class="score-subtitle">${subtitle}</div>
-    <div class="score-breakdown">
-      <div class="breakdown-item">
-        <div class="breakdown-val correct-val">${state.correct}</div>
-        <div class="breakdown-label">Correct</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-val wrong-val">${total - state.correct}</div>
-        <div class="breakdown-label">Incorrect</div>
-      </div>
-      <div class="breakdown-item">
-        <div class="breakdown-val" style="color:var(--muted)">${total}</div>
-        <div class="breakdown-label">Total</div>
-      </div>
-    </div>
-    <button class="btn btn-primary" onclick="initQuestions()" style="font-size:16px;padding:14px 32px;">
-      Try Again ↺
-    </button>
-  `;
-  document.getElementById('score-screen').classList.add('show');
-  document.getElementById('progress-fill').style.width = '100%';
-}
-
-// Boot
-initQuestions();
 </script>
 </body>
 </html>
